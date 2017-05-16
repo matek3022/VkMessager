@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cookies</string>
+    <string name="ALL_FRIENDS">Все друзья</string>
+    <string name="BIRTHSDAY">День рождения</string>
+    <string name="COMMUNITY">Сообщество</string>
+    <string name="FILTER">Фильтр</string>
+    <string name="FORWARD">Переслать</string>
+    <string name="FORWARD_MESSAGES">Пересланные сообщения</string>
+    <string name="FRIENDS">Друзья</string>
+    <string name="GIFT">Подарок</string>
+    <string name="HOME_PHONE">"Домашний телефон: "</string>
+    <string name="LOADING">Загрузка...</string>
+    <string name="LOST_INTERNET_CONNECTION">Потеряно интернет соединение</string>
+    <string name="MOBILE_PHONE">"Мобильный телефон: "</string>
+    <string name="PHOTO">Фото</string>
+    <string name="SETTINGS">Настройки</string>
+    <string name="STICKER">Стикер</string>
+    <string name="UNIVERSITY">"Университет: "</string>
+    <string name="VOID_MESSAGE">Пустое сообщение</string>
+    <string name="WRITE_MESSAGE">Написать сообщение</string>
+    <string name="YOU">"Вы: "</string>
+    <string name="action_settings">Настройки</string>
+    <string name="dialogs">Диалоги</string>
+    <string name="display_attached_photo">Отображать прикрепленные фото</string>
+    <string name="friend_list">Список друзей</string>
+    <string name="out">Нажми на меня</string>
+    <string name="press_the_button_to_exit">Нажмите кнопку, чтобы выйти</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="show_profile_photos">Отображать фото профилей</string>
+    <string name="left_chat">покинул чат</string>
+    <string name="enter_key_this">Введите ключ здесь</string>
+</resources>

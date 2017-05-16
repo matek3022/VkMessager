@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="D:\AndroidSDK\extras\android\m2repository\com\android\support\support-annotations\25.0.1\support-annotations-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\support-annotations-25.0.1_e66696e5fa37af932085ea6add30296680568443.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_77e440a5fd71b793506ec4d002522a43bd541617\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\design\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-24.2.1_7c989f86e4b4751f3d1174b1dd8a34babf916309\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\internal_impl-25.0.1_0e8278d042c6a03781741fb481d5888846197342.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.chrisbanes\PhotoView\1.3.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="a6b765967c8091ebb45f2c02972a2fa9cba5dd87">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.chrisbanes-PhotoView-1.3.1_c507bc0ba0819a338f4d8d0790ee29c86e8df27d\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\bolts-tasks-1.4.0_47975c800c3682395a529978ca2b95c2804db309.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\pl.droidsonroids.gif\android-gif-drawable\1.2.2\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="862679f96151949a102d37b018d962961019dc65">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\pl.droidsonroids.gif-android-gif-drawable-1.2.2_00974414bc34f9b4efc0af268f41113692fd4f76.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.0.1_3cac81ca83a4a0cdefe5ab4031b5515bae45f28c\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit\2.1.0\2de7cd8b95b7021b1d597f049bcb422055119f2c\retrofit-2.1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="2de7cd8b95b7021b1d597f049bcb422055119f2c">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\retrofit-2.1.0_9f5bcd0d2ef90a99f8d54da75e4a5edce22cd6bb.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.3.0\2b802460eea20f8f2ad9c08c74e0f14718e88aa9\okhttp-3.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="2b802460eea20f8f2ad9c08c74e0f14718e88aa9">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-3.3.0_45b4e9e9ef0079c9cdefe47da4b209d3b2354fff\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="adf565077878239443ba6d4a3f8c0401a5f6eacd">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_52c9d773e1a6475bf3eae078745112cf6b6e1478\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-media-compat-25.0.1_16fc53b93843885930ad21f75b4d254ed6ddbcf1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\hani.momanii.supernova_emoji_library\supernova-emoji-library\0.0.2\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b83e82da8c456a9766711909d277d6bdda6c0a24">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\hani.momanii.supernova_emoji_library-supernova-emoji-library-0.0.2_ee290b1ec24d54beca9d83b3b7bf18ffea970966.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\24.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c5e6490573cd2cc8018417f60ddd251138b6ed61">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-cardview-v7-24.2.1_da3cdf3a604dd603193859c615b3f1d4b5af9279.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8860ae940a70ff8c7f1c1f6b3937b66a641afb75">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_31d229446290fb736277587b62d52e2995a5933a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.stfalcon\frescoimageviewer\0.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0e17ff7294dd63f5b02bba3559184b8ba230356e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.stfalcon-frescoimageviewer-0.4.0_697ee84f9c084296fde553c8bff2735140ce0053\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-vector-drawable-25.0.1_b60cce29de7e77ba70daeb6be617a58fff99fd02.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.7\751f548c85fa49f330cecbb1875893f971b33c4e\gson-2.7.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.7_e349ed830b5653576e0f56ee9aa2e0111121cf2b\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="65d086ee9daaf87b5af62ad24471edafa433354c">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.google.android.gms-play-services-appindexing-8.4.0_60d76f4ceccf21712c63bba1c131b0fb46ef5a58.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5c352647cf4de6a584197465649ea8a76875bbfa">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.facebook.fresco-fbcore-1.0.0_d6585d35f7207ce5897d66378b8ac3a1ef373bdc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\picasso-2.5.2_f66168f67a318a8c7894ab4588f96442459f6ed8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-appcompat-v7-25.0.1_a6b0153ceb6e6cd6de2ebce1328a4ae6c0e4f25c.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-8.4.0_6d03463253e5b315790aa79b5418af1eee42a38f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.armcha\AutoLinkTextView\0.2.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="ae6549140cd5ab4587c8fe7387f7410704134950">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.armcha-AutoLinkTextView-0.2.0_fae3c2e3781a335e851961ee6ebd3c508c8c4f3c\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-gson\2.1.0\aa557d71ead91cbf26e0c316a0f593d168303309\converter-gson-2.1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="aa557d71ead91cbf26e0c316a0f593d168303309">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\converter-gson-2.1.0_2f439723ac7e4578d638a2ae13c8581863e462c1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-core-utils-25.0.1_6e4052c96e408dfd5de6c744dfe65156d05b582b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.google.android.gms-play-services-basement-8.4.0_df7d0cbc1678bbc0364e8b955fe1a4d0f9997876.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-compat-25.0.1_30322cd5d06b709895d0c308a9bb789e327787f5.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="f83b00041ecfba705603fec40363416c7de69719">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_ab7259cddad20c9b78db3ef2bf365bc4f958a092\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_06c0e0c8930c2f70a6bf18a4a5167abee7805b8a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.orangegangsters\swipy\1.2.3\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="bb183283871cbff072b40a32e55e205ceac1dbe9">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.orangegangsters-swipy-1.2.3_4e8bf923f6b215cbb2ae224717a64edaada3bd0c\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-v4-25.0.1_28d24ce9df1522aa4b157fb4eba533453927bbb0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="26c6eef571592c91f29e56fda0bac73321de0c92">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-fragment-25.0.1_3104eed2a12d187c97f2081af8345839a13baba9.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ff265b4141de70fb2637f818787b53a245ce967">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.fresco-drawee-1.0.0_944bd4ef29af662140e10b5187b012a25c8d1502\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbd300a294fd5ad1ecb0a25f956d6a318b6ce68e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.facebook.fresco-imagepipeline-1.0.0_76337bf51eb07f89a9f13472d3f47064664a416a.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.nekocode\Emojix\1.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="459ac7c69759b530aa16fac3b56ca3e615cb7ff4">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.github.nekocode-Emojix-1.2_5eb5cd5ed16921032a1207e04afc95c36fce836a\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-support-core-ui-25.0.1_22746680479a601ed95774f47969c03aa7a46713.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\me.relex\photodraweeview\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d2504ce48feaeaa9cc03ad554d985a47467f7e08">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\me.relex-photodraweeview-1.1.0_2f9d37788af03ff28b05ece1367bce695f2751e6.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-24.2.1_62846cb49531dec5c104158c7f47594cd4606f37\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.0.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-animated-vector-drawable-25.0.1_3cac81ca83a4a0cdefe5ab4031b5515bae45f28c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="82da2e1fff613de7a111e04c38f9c7e654ef3116">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.facebook.fresco-imagepipeline-base-1.0.0_a1d69cf0e549eff1fdc0df11213368447e8a8644.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\okio-1.8.0_34c796507fb9de179a5aa261c8925e22404e5582.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\fresco\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="07b4097115bb7e68aa0123fd9fb6873c433f23a3">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.facebook.fresco-fresco-1.0.0_7119f16f1582c01f1629b40d318d908001bdd568.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_0e8278d042c6a03781741fb481d5888846197342\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.chrisbanes\PhotoView\1.3.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="a6b765967c8091ebb45f2c02972a2fa9cba5dd87">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.github.chrisbanes-PhotoView-1.3.1_c507bc0ba0819a338f4d8d0790ee29c86e8df27d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\design\24.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-design-24.2.1_7c989f86e4b4751f3d1174b1dd8a34babf916309.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.0.1_a6b0153ceb6e6cd6de2ebce1328a4ae6c0e4f25c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\picasso-2.5.2_f66168f67a318a8c7894ab4588f96442459f6ed8\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\24.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.android.support-recyclerview-v7-24.2.1_62846cb49531dec5c104158c7f47594cd4606f37.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\bolts-tasks-1.4.0_47975c800c3682395a529978ca2b95c2804db309\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.0.1_16fc53b93843885930ad21f75b4d254ed6ddbcf1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\pl.droidsonroids.gif\android-gif-drawable\1.2.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="862679f96151949a102d37b018d962961019dc65">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\pl.droidsonroids.gif-android-gif-drawable-1.2.2_00974414bc34f9b4efc0af268f41113692fd4f76\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\1.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ff265b4141de70fb2637f818787b53a245ce967">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.facebook.fresco-drawee-1.0.0_944bd4ef29af662140e10b5187b012a25c8d1502.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit\2.1.0\2de7cd8b95b7021b1d597f049bcb422055119f2c\retrofit-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="2de7cd8b95b7021b1d597f049bcb422055119f2c">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\retrofit-2.1.0_9f5bcd0d2ef90a99f8d54da75e4a5edce22cd6bb\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.3.0\2b802460eea20f8f2ad9c08c74e0f14718e88aa9\okhttp-3.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="2b802460eea20f8f2ad9c08c74e0f14718e88aa9">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\okhttp-3.3.0_45b4e9e9ef0079c9cdefe47da4b209d3b2354fff.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidSDK\extras\android\m2repository\com\android\support\support-annotations\25.0.1\support-annotations-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.0.1_e66696e5fa37af932085ea6add30296680568443\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.0.1_b60cce29de7e77ba70daeb6be617a58fff99fd02\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.7\751f548c85fa49f330cecbb1875893f971b33c4e\gson-2.7.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\gson-2.7_e349ed830b5653576e0f56ee9aa2e0111121cf2b.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\hani.momanii.supernova_emoji_library\supernova-emoji-library\0.0.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b83e82da8c456a9766711909d277d6bdda6c0a24">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\hani.momanii.supernova_emoji_library-supernova-emoji-library-0.0.2_ee290b1ec24d54beca9d83b3b7bf18ffea970966\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c5e6490573cd2cc8018417f60ddd251138b6ed61">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-24.2.1_da3cdf3a604dd603193859c615b3f1d4b5af9279\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.stfalcon\frescoimageviewer\0.4.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0e17ff7294dd63f5b02bba3559184b8ba230356e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.github.stfalcon-frescoimageviewer-0.4.0_697ee84f9c084296fde553c8bff2735140ce0053.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\8.4.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.google.android.gms-play-services-base-8.4.0_6d03463253e5b315790aa79b5418af1eee42a38f.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5c352647cf4de6a584197465649ea8a76875bbfa">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.fresco-fbcore-1.0.0_d6585d35f7207ce5897d66378b8ac3a1ef373bdc\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\internal_impl-25.0.1_06c0e0c8930c2f70a6bf18a4a5167abee7805b8a.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\8.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="65d086ee9daaf87b5af62ad24471edafa433354c">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-8.4.0_60d76f4ceccf21712c63bba1c131b0fb46ef5a58\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="3af8cc51ef7088e56f132780da8c0bd858b6a6ad">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\internal_impl-25.0.1_b6575012b3081066f816d5ee9f68c8b0e9fb8029.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\internal_impl-25.0.1_77e440a5fd71b793506ec4d002522a43bd541617.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="26c6eef571592c91f29e56fda0bac73321de0c92">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-25.0.1_3104eed2a12d187c97f2081af8345839a13baba9\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.armcha\AutoLinkTextView\0.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="ae6549140cd5ab4587c8fe7387f7410704134950">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.github.armcha-AutoLinkTextView-0.2.0_fae3c2e3781a335e851961ee6ebd3c508c8c4f3c.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-gson\2.1.0\aa557d71ead91cbf26e0c316a0f593d168303309\converter-gson-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="aa557d71ead91cbf26e0c316a0f593d168303309">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\converter-gson-2.1.0_2f439723ac7e4578d638a2ae13c8581863e462c1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="3af8cc51ef7088e56f132780da8c0bd858b6a6ad">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_b6575012b3081066f816d5ee9f68c8b0e9fb8029\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.0.1_6e4052c96e408dfd5de6c744dfe65156d05b582b\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.orangegangsters\swipy\1.2.3\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="bb183283871cbff072b40a32e55e205ceac1dbe9">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.github.orangegangsters-swipy-1.2.3_4e8bf923f6b215cbb2ae224717a64edaada3bd0c.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\me.relex\photodraweeview\1.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d2504ce48feaeaa9cc03ad554d985a47467f7e08">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\me.relex-photodraweeview-1.1.0_2f9d37788af03ff28b05ece1367bce695f2751e6\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="f83b00041ecfba705603fec40363416c7de69719">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\internal_impl-25.0.1_ab7259cddad20c9b78db3ef2bf365bc4f958a092.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.0.1_28d24ce9df1522aa4b157fb4eba533453927bbb0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-8.4.0_df7d0cbc1678bbc0364e8b955fe1a4d0f9997876\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.github.nekocode\Emojix\1.2\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.3"
+        sha1="459ac7c69759b530aa16fac3b56ca3e615cb7ff4">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\pre-dexed\release\com.github.nekocode-Emojix-1.2_5eb5cd5ed16921032a1207e04afc95c36fce836a.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="82da2e1fff613de7a111e04c38f9c7e654ef3116">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.fresco-imagepipeline-base-1.0.0_a1d69cf0e549eff1fdc0df11213368447e8a8644\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\matek\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\okio-1.8.0_34c796507fb9de179a5aa261c8925e22404e5582\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.0.1_22746680479a601ed95774f47969c03aa7a46713\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbd300a294fd5ad1ecb0a25f956d6a318b6ce68e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.fresco-imagepipeline-1.0.0_76337bf51eb07f89a9f13472d3f47064664a416a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.facebook.fresco\fresco\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="07b4097115bb7e68aa0123fd9fb6873c433f23a3">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.fresco-fresco-1.0.0_7119f16f1582c01f1629b40d318d908001bdd568\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\AndroidProjects\VkMessager\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="D:\AndroidProjects\VkMessager\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.0.1_30322cd5d06b709895d0c308a9bb789e327787f5\classes.dex" />
+    </item>
+
+</items>

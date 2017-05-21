@@ -221,7 +221,6 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<User>>>>() {
             @Override
             public void onResponse(Call<ServerResponse<ItemMess<ArrayList<User>>>> call, Response<ServerResponse<ItemMess<ArrayList<User>>>> response) {
-                Log.wtf("motya", response.raw().toString());
                 ArrayList<User> l = response.body().getResponse().getitem();
                 info.clear();
                 info.addAll(l);
@@ -236,12 +235,10 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 pager.setAdapter(pagerAdapter);
                 pager.setCurrentItem(page);
                 refreshLayout.setRefreshing(false);
-                Log.i("motya", info.get(0).getFirst_name());
             }
 
             @Override
             public void onFailure(Call<ServerResponse<ItemMess<ArrayList<User>>>> call, Throwable t) {
-                Log.wtf("motya", t.getMessage());
                 refreshLayout.setRefreshing(false);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);

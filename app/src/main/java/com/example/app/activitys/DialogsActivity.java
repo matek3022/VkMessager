@@ -18,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -134,7 +133,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
                     call.enqueue(new Callback<ServerResponse>() {
                         @Override
                         public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                            Log.wtf("motya", response.raw().toString());
                             off = 0;
                             refresh(off);
                         }
@@ -169,7 +167,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
             }
             for (int i = 0; i < cursor1.getCount(); i++) {
                 names.add(gson.fromJson(cursor1.getString(name), User.class));
-                Log.i("motya", "" + names.get(i).getFirst_name());
                 cursor1.moveToNext();
             }
             off=0;
@@ -227,7 +224,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
 
                 for (int i = 0; i < names.size(); i++) {
                     contentValues.put(DBHelper.KEY_ID_USER, names.get(i).getId());
-                    Log.i("motya", "" + names.get(i).getFirst_name());
                     contentValues.put(DBHelper.KEY_OBJ, gson.toJson(names.get(i)));
                     dataBase.insert(DBHelper.TABLE_USERS, null, contentValues);
                 }
@@ -252,7 +248,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onResponse(Call<ServerResponse<ItemMess<ArrayList<Item>>>> call,
                                    Response<ServerResponse<ItemMess<ArrayList<Item>>>> response) {
-                Log.wtf("motya", response.raw().toString());
                 ArrayList<Item> l = response.body().getResponse().getitem();
                 if (l.size() != 0) stroka += "" + l.get(0).getMessage().getUser_id();
                 if (offset == 0) {
@@ -274,7 +269,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
                 call1.enqueue(new Callback<ServerResponse<ArrayList<User>>>() {
                     @Override
                     public void onResponse(Call<ServerResponse<ArrayList<User>>> call1, Response<ServerResponse<ArrayList<User>>> response) {
-                        Log.wtf("motya", response.raw().toString());
                         ArrayList<User> l1 = response.body().getResponse();
                         if (offset == 0) {
                             names.clear();
@@ -293,7 +287,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
 
                     @Override
                     public void onFailure(Call<ServerResponse<ArrayList<User>>> call1, Throwable t) {
-                        Log.wtf("motya", t.getMessage());
                         refreshLayout.setRefreshing(false);
                         Toast toast = Toast.makeText(getApplicationContext(),
                                 getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);
@@ -305,7 +298,6 @@ public class DialogsActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onFailure(Call<ServerResponse<ItemMess<ArrayList<Item>>>> call, Throwable t) {
-                Log.wtf("motya", t.getMessage());
                 refreshLayout.setRefreshing(false);
                 Toast toast = Toast.makeText(getApplicationContext(),
                         getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);

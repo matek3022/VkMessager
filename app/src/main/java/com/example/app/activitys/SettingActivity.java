@@ -20,7 +20,7 @@ public class SettingActivity extends AppCompatActivity {
     PreferencesManager preferencesManager;
     EditText editText;
     byte[] crypt;
-    byte[] decrypt;
+    String decrypt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,9 @@ public class SettingActivity extends AppCompatActivity {
         Button applyButton = (Button) findViewById(R.id.apply);
         Button buttonCrypt = (Button) findViewById(R.id.crypt);
         Button buttonDecrypt = (Button) findViewById(R.id.decrypt);
+        Button deleteFirstByte = (Button) findViewById(R.id.deleteFirstByte);
+        Button deleteLastByte = (Button) findViewById(R.id.deleteLastByte);
+
         final EditText editText2 = (EditText) findViewById(R.id.editText2);
         editText = (EditText) findViewById(R.id.editText);
         preferencesManager = PreferencesManager.getInstance();
@@ -43,7 +46,6 @@ public class SettingActivity extends AppCompatActivity {
         photouser.setChecked(preferencesManager.getSettingPhotoUserOn());
         photochat.setChecked(preferencesManager.getSettingPhotoChatOn());
         online.setChecked(preferencesManager.getSettingOnline());
-
 
         photouser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -85,7 +87,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 decrypt = CryptUtils.decryptString(crypt);
-                editText2.setText(new String(decrypt));
+                editText2.setText(decrypt);
             }
         });
         applyButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +97,27 @@ public class SettingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Ключ сохранен", Toast.LENGTH_SHORT).show();
             }
         });
+
+        deleteFirstByte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (crypt.length!=0){
+                    crypt[0]=0;
+                    editText2.setText(new String(crypt));
+                }
+            }
+        });
+
+        deleteLastByte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (crypt.length!=0){
+                    crypt[crypt.length-1]=0;
+                    editText2.setText(new String(crypt));
+                }
+            }
+        });
+
     }
 
     @Override

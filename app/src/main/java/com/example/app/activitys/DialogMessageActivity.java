@@ -173,7 +173,6 @@ public class DialogMessageActivity extends AppCompatActivity {
                         call.enqueue(new Callback<ServerResponse>() {
                             @Override
                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                                Log.wtf("motya", response.raw().toString());
                                 frwdMessages.clear();
                                 mess.setHint (getString(R.string.WRITE_MESSAGE));
                                 off = 0;
@@ -225,7 +224,6 @@ public class DialogMessageActivity extends AppCompatActivity {
                     call.enqueue(new Callback<ServerResponse>() {
                         @Override
                         public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                            Log.wtf("motya", response.raw().toString());
                             frwdMessages.clear();
                             mess.setHint (getString(R.string.WRITE_MESSAGE));
                             off = 0;
@@ -268,7 +266,6 @@ public class DialogMessageActivity extends AppCompatActivity {
             }
             for (int i = 0; i < cursor1.getCount(); i++) {
                 names.add(gson.fromJson(cursor1.getString(name), User.class));
-                Log.i("motyaChat", "" + names.get(i).getFirst_name());
                 cursor1.moveToNext();
             }
             adapter.reserv.addAll(items);
@@ -413,7 +410,6 @@ public class DialogMessageActivity extends AppCompatActivity {
             call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<Dialogs>>>>() {
                 @Override
                 public void onResponse(Call<ServerResponse<ItemMess<ArrayList<Dialogs>>>> call, Response<ServerResponse<ItemMess<ArrayList<Dialogs>>>> response) {
-                    Log.wtf("motya", response.raw().toString());
                     ArrayList<Dialogs> l = response.body().getResponse().getitem();
                     String people_id = "" + l.get(0).getUser_id();
                     namesIds.clear();
@@ -442,7 +438,6 @@ public class DialogMessageActivity extends AppCompatActivity {
                     call1.enqueue(new Callback<ServerResponse<ArrayList<User>>>() {
                         @Override
                         public void onResponse(Call<ServerResponse<ArrayList<User>>> call1, Response<ServerResponse<ArrayList<User>>> response) {
-                            Log.wtf("motya", response.raw().toString());
                             ArrayList<User> l = response.body().getResponse();
                             if (offset == 0) {
                                 names.clear();
@@ -713,14 +708,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                 @Override
                 public void onAutoLinkTextClick(AutoLinkMode autoLinkMode, String matchedText) {
                     if (AutoLinkMode.MODE_URL.equals(autoLinkMode)) {
-                        Log.wtf("motya", matchedText);
                         while (matchedText.contains(" ")) {
                             matchedText = matchedText.replace(" ", "");
                         }
                         while (matchedText.contains("\n")) {
                             matchedText = matchedText.replace("\n", "");
                         }
-                        Log.wtf("motya", "fix_matchetText=" + matchedText);
                         Util.goToUrl(DialogMessageActivity.this, matchedText);
                     }
                 }
@@ -847,7 +840,6 @@ public class DialogMessageActivity extends AppCompatActivity {
                                 call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<VideoInformation>>>>() {
                                     @Override
                                     public void onResponse(Call<ServerResponse<ItemMess<ArrayList<VideoInformation>>>> call, Response<ServerResponse<ItemMess<ArrayList<VideoInformation>>>> response) {
-                                        Log.wtf("motya", response.raw().toString());
                                         String res = response.body().getResponse().getitem().get(0).getPlayer();
                                         Uri address = Uri.parse(res);
                                         Intent openlink = new Intent(Intent.ACTION_VIEW, address);

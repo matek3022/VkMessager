@@ -8,7 +8,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -181,7 +180,6 @@ public class UserActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ServerResponse<ItemMess<ArrayList<PhotoMess>>>> call1, Throwable t) {
-                        Log.wtf("motya", t.getMessage());
                         Toast toast = Toast.makeText(getApplicationContext(),
                                 getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);

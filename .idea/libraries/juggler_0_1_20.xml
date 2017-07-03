@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="juggler-0.1.20">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/me.ilich/juggler/0.1.20/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/me.ilich/juggler/0.1.20/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.ilich/juggler/0.1.20/c1521a95563f79e7bc36d88f4850322551c656bb/juggler-0.1.20-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

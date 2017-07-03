@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.app.R;
+import com.example.app.fragments.states.DialogListState;
 import com.example.app.fragments.states.InnovationListState;
+import com.vk.sdk.VKSdk;
 
 import me.ilich.juggler.Juggler;
 import me.ilich.juggler.change.Add;
@@ -17,6 +19,8 @@ public class BaseActivity extends JugglerActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        VKSdk.initialize(getApplicationContext());
+        navigateTo().state(Add.newActivity(new DialogListState(), BaseActivity.class));
     }
 
     public void relogin() {

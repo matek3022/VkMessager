@@ -50,5 +50,6 @@ dependencies {
     compile 'com.github.nekocode:Emojix:1.2'
     compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.vk:androidsdk:1.6.7'
     compile 'junit:junit:4.12'
 }

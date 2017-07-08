@@ -6,8 +6,7 @@
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context="com.example.app.activitys.DialogMessageActivity">
+    android:background="@android:color/white">
 
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -77,12 +76,12 @@
 
     <Button
         android:id="@+id/fab"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/sizeImageMedium"
+        android:layout_height="@dimen/sizeImageMedium"
         android:layout_above="@+id/inputContainer"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/defaultPadding"
         android:background="@mipmap/forward_icon" />
 
 </RelativeLayout>

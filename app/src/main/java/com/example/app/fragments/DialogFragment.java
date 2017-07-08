@@ -140,7 +140,7 @@ public class DialogFragment extends JugglerFragment {
         EmojIconActions emojIconActions = new EmojIconActions(getActivity(), view.findViewById(R.id.rootContainer), mess,imageEmoji);
         emojIconActions.ShowEmojIcon();
 
-        if (frwdMessages.size()>0) mess.setHint(" "+ frwdMessages.size()+ " " + getString(R.string.FORWARD_MESSAGES));
+        if (frwdMessages.size()>0) mess.setHint("Выбрано "+ frwdMessages.size());
 
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.setStackFromEnd(true);
@@ -502,7 +502,7 @@ public class DialogFragment extends JugglerFragment {
             final ViewHolder viewHolder = holder;
 
             if (frwdMessages.size()==0) forwardButton.setVisibility(View.INVISIBLE);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener forwardListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     boolean chek = false;
@@ -525,11 +525,10 @@ public class DialogFragment extends JugglerFragment {
                     }
 
                     if (frwdMessages.size()>0){
-                        mess.setHint(" "+ frwdMessages.size()+ " " + getString(R.string.FORWARD_MESSAGES));
+                        mess.setHint("Выбрано "+ frwdMessages.size());
                     }else{
                         mess.setHint(getString(R.string.WRITE_MESSAGE));
                     }
-
                     if (frwdMessages.size()>0){
                         forwardButton.setVisibility(View.VISIBLE);
                         forwardButton.setOnClickListener(new View.OnClickListener() {
@@ -566,7 +565,9 @@ public class DialogFragment extends JugglerFragment {
                         forwardButton.setVisibility(View.INVISIBLE);
                     }
                 }
-            });
+            };
+            holder.itemView.setOnClickListener(forwardListener);
+            holder.body.setOnClickListener(forwardListener);
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

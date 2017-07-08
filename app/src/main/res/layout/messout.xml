@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/foo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <RelativeLayout
-
+        android:id="@+id/root_container_nessout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -19,6 +18,8 @@
             android:id="@+id/relativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/imageView"
+            android:layout_toLeftOf="@+id/imageView"
             android:background="@drawable/circle"
             android:padding="6dp">
 
@@ -52,19 +53,22 @@
             android:id="@+id/imageView6"
             android:layout_width="10dp"
             android:layout_height="10dp"
+            android:src="@drawable/tochka"
             android:layout_alignBottom="@+id/imageView"
             android:layout_alignEnd="@+id/imageView"
-            android:layout_alignRight="@+id/imageView"
-            app:srcCompat="@drawable/tochka" />
+            android:layout_alignRight="@+id/imageView" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:minWidth="50dp"
+            android:minHeight="50dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/relativeLayout"
-            android:layout_toRightOf="@+id/relativeLayout" />
+            android:layout_marginStart="5dp"/>
 
 
     </RelativeLayout>

@@ -15,7 +15,6 @@ import com.example.app.R;
 import com.example.app.activitys.StartActivity;
 import com.example.app.managers.PreferencesManager;
 
-import me.ilich.juggler.change.Remove;
 import me.ilich.juggler.gui.JugglerFragment;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
@@ -75,7 +74,7 @@ public class SettingFragment extends JugglerFragment {
             @Override
             public void onClick(View v) {
                 preferencesManager.setToken("");
-                navigateTo().state(Remove.closeAllActivities());
+                getActivity().finish();
                 startActivity(StartActivity.getIntent(getActivity(),true,true));
             }
         });

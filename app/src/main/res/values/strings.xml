@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Cookies</string>
     <string name="title_dialogs">Диалоги</string>
-    <string name="title_settings">Настройки</string>
-    <string name="title_friends">Друзья</string>
+    <string name="title_settings" translatable="false">Настройки</string>
+    <string name="title_friends" translatable="false">Друзья</string>
 
 
 
@@ -39,4 +39,5 @@
     <string name="stop" translatable="false">stop</string>
     <string name="left_chat">left chat</string>
     <string name="enter_key_this">Write key this</string>
+    <string name="title_settings_app">Настройки приложения</string>
 </resources>

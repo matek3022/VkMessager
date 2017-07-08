@@ -6,45 +6,48 @@ import android.support.annotation.Nullable;
 
 import com.example.app.R;
 import com.example.app.fragments.DialogListFragment;
-import com.example.app.fragments.NavigationFragment;
 import com.example.app.fragments.ToolbarFragment;
 
 import me.ilich.juggler.gui.JugglerFragment;
-import me.ilich.juggler.states.ContentToolbarNavigationState;
-import me.ilich.juggler.states.VoidParams;
+import me.ilich.juggler.states.ContentBelowToolbarState;
+import me.ilich.juggler.states.State;
 
 /**
  * Created by matek on 03.07.2017.
  */
 
-public class DialogListState extends ContentToolbarNavigationState<VoidParams> {
+public class DialogListState extends ContentBelowToolbarState<DialogListState.Params> {
 
-    public DialogListState() {
-        super(VoidParams.instance());
+    public DialogListState(String forwardMessages) {
+        super(new Params(forwardMessages));
     }
 
     @Override
-    public String getTitle(Context context, VoidParams params) {
-        return "Диалоги";
+    public String getTitle(Context context, DialogListState.Params params) {
+        if (params.forwardMesseges == null) return context.getString(R.string.title_dialogs);
+        else return "Выберите диалог";
     }
 
     @Override
-    public Drawable getUpNavigationIcon(Context context, VoidParams params) {
-        return context.getResources().getDrawable(R.drawable.ic_navigate_burger);
+    public Drawable getUpNavigationIcon(Context context, DialogListState.Params params) {
+        return context.getResources().getDrawable(R.drawable.ic_navigate_back);
     }
 
     @Override
-    protected JugglerFragment onConvertContent(VoidParams params, @Nullable JugglerFragment fragment) {
-        return new DialogListFragment();
+    protected JugglerFragment onConvertContent(DialogListState.Params params, @Nullable JugglerFragment fragment) {
+        return DialogListFragment.getInstance(params.forwardMesseges);
     }
 
     @Override
-    protected JugglerFragment onConvertToolbar(VoidParams params, @Nullable JugglerFragment fragment) {
-        return ToolbarFragment.createNavigation();
+    protected JugglerFragment onConvertToolbar(DialogListState.Params params, @Nullable JugglerFragment fragment) {
+        if (params.forwardMesseges == null) return ToolbarFragment.create();
+        else return ToolbarFragment.createNavigation();
     }
 
-    @Override
-    protected JugglerFragment onConvertNavigation(VoidParams params, @Nullable JugglerFragment fragment) {
-        return NavigationFragment.create(0);
+    static class Params extends State.Params{
+        String forwardMesseges;
+        Params(String forwardMessages){
+            this.forwardMesseges = forwardMessages;
+        }
     }
 }

@@ -1,7 +1,7 @@
-package com.example.app.activitys;
+package com.example.app.fragments;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,15 +10,13 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.activitys.BaseActivity;
+import com.example.app.fragments.states.DialogListState;
+import com.example.app.fragments.states.ForwardMessagesState;
+import com.example.app.fragments.states.FriendListState;
 import com.example.app.managers.PreferencesManager;
 import com.example.app.sqlite.DBHelper;
 import com.example.app.transformation.CircularTransformation;
@@ -41,6 +43,7 @@ import com.example.app.vkobjects.ServerResponse;
 import com.example.app.vkobjects.User;
 import com.example.app.vkobjects.VideoInformation;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkOnClickListener;
 import com.luseen.autolinklibrary.AutoLinkTextView;
@@ -54,17 +57,38 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import cn.nekocode.emojix.Emojix;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import me.ilich.juggler.change.Add;
+import me.ilich.juggler.gui.JugglerFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.app.App.frwdMessages;
 import static com.example.app.App.service;
+import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
-public class DialogMessageActivity extends AppCompatActivity {
+/**
+ * Created by matek on 08.07.2017.
+ */
+
+public class DialogFragment extends JugglerFragment {
+
+    private static final String EXTRA_USER_ID="userID";
+    private static final String EXTRA_CHAT_ID="ChatID";
+    private static final String EXTRA_FORWARD_MESS = "frwrd_mess";
+
+    public static DialogFragment getInstance(int userId, int chatId, String forwardMess) {
+        DialogFragment fragment = new DialogFragment();
+        Bundle args = new Bundle();
+        args.putInt(EXTRA_USER_ID, userId);
+        args.putInt(EXTRA_CHAT_ID, chatId);
+        args.putString(EXTRA_FORWARD_MESS, forwardMess);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private ArrayList <Integer> frwdMessages = new ArrayList<>();
 
     private int user_id;
     private int chat_id;
@@ -82,47 +106,39 @@ public class DialogMessageActivity extends AppCompatActivity {
     PreferencesManager preferencesManager;
     EmojiconEditText mess;
     Button forwardButton;
-    private static final String EXTRA_USER_ID="userID";
-    private static final String EXTRA_TITLE="Title";
-    private static final String EXTRA_USER_NAME="userName";
-    private static final String EXTRA_CHAT_ID="ChatID";
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private String inputForwardMess;
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dialog_message);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_dialog, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         frwd=false;
         dataBase = DBHelper.getInstance().getWritableDatabase();
         preferencesManager = PreferencesManager.getInstance();
-        user_id = getIntent().getIntExtra(EXTRA_USER_ID, 0);
-        chat_id = getIntent().getIntExtra(EXTRA_CHAT_ID, 0);
+        user_id = getArguments().getInt(EXTRA_USER_ID, 0);
+        chat_id = getArguments().getInt(EXTRA_CHAT_ID, 0);
+        inputForwardMess = getArguments().getString(EXTRA_FORWARD_MESS, null);
+        if (inputForwardMess != null) frwdMessages = new Gson().fromJson(inputForwardMess, new TypeToken<ArrayList<Integer>>(){}.getType());
         items = new ArrayList<>();
         names = new ArrayList<>();
         namesIds = new ArrayList<>();
         adapter = new Adapter();
-        recyclerView = (RecyclerView) findViewById(R.id.list);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        mess = (EmojiconEditText) findViewById(R.id.editText);
-        refreshLayout = (SwipyRefreshLayout) findViewById(R.id.refresh);
-        sendButton = (Button) findViewById(R.id.button);
-        forwardButton = (Button) findViewById(R.id.fab);
-        ImageView imageEmoji = (ImageView)findViewById(R.id.emoji_button);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        mess = (EmojiconEditText) view.findViewById(R.id.editText);
+        refreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.refresh);
+        sendButton = (Button) view.findViewById(R.id.button);
+        forwardButton = (Button) view.findViewById(R.id.fab);
+        ImageView imageEmoji = (ImageView)view.findViewById(R.id.emoji_button);
         imageEmoji.setImageResource(R.drawable.smiley);
 
-        EmojIconActions emojIconActions = new EmojIconActions(this, findViewById(R.id.activity_main3), mess,imageEmoji);
+        EmojIconActions emojIconActions = new EmojIconActions(getActivity(), view.findViewById(R.id.rootContainer), mess,imageEmoji);
         emojIconActions.ShowEmojIcon();
-
-        if (chat_id != 0) {
-            user_id = 2000000000 + chat_id;
-            title = getIntent().getStringExtra(EXTRA_TITLE);
-        } else {
-            if (user_id < 0) {
-                title = getString(R.string.COMMUNITY);
-            } else {
-                title = getIntent().getStringExtra(EXTRA_USER_NAME);
-            }
-        }
 
         if (frwdMessages.size()>0) mess.setHint(" "+ frwdMessages.size()+ " " + getString(R.string.FORWARD_MESSAGES));
 
@@ -130,8 +146,6 @@ public class DialogMessageActivity extends AppCompatActivity {
         llm.setStackFromEnd(true);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(adapter);
-
-        setTitle(title);
 
         refreshLayout.setColorSchemeResources(R.color.accent);
 
@@ -277,113 +291,8 @@ public class DialogMessageActivity extends AppCompatActivity {
         }
         cursor.close();
         cursor1.close();
+
     }
-
-    @Override
-    protected void onResume() {
-        if (frwdMessages.size()>0){
-            mess.setHint(" "+ frwdMessages.size()+ " " + getString(R.string.FORWARD_MESSAGES));
-        }else{
-            mess.setHint(getString(R.string.WRITE_MESSAGE));
-        }
-        adapter.notifyDataSetChanged();
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        new UpdateDataBase(user_id,items,names).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-        super.onStop();
-    }
-
-
-    static Intent getIntent (Context context, int userId, int chatId, String title, String userName, boolean frwdMessDetector){
-        Intent intent = new Intent(context, DialogMessageActivity.class);
-        intent.putExtra(EXTRA_USER_ID, userId);
-        intent.putExtra(EXTRA_TITLE, title);
-        intent.putExtra(EXTRA_USER_NAME, userName);
-        intent.putExtra(EXTRA_CHAT_ID, chatId);
-        if (!frwdMessDetector){
-            frwdMessages.clear();
-        }
-        return intent;
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(Emojix.wrap(newBase));
-    }
-
-    class UpdateDataBase extends AsyncTask<Void, Void, Void> {
-        ArrayList<Dialogs> items;
-        ArrayList<User> names;
-        int user_id;
-        public UpdateDataBase (int id,ArrayList<Dialogs> itemArrayList, ArrayList<User> userArrayList){
-            items = new ArrayList<>();
-            names = new ArrayList<>();
-            items.addAll(itemArrayList);
-            names.addAll(userArrayList);
-            user_id=id;
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-            dataBase.beginTransaction();
-            try {
-                int howmuch=0;
-                howmuch=dataBase.delete(DBHelper.TABLE_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
-                Log.i("howMuch",howmuch+"");
-                howmuch=dataBase.delete(DBHelper.TABLE_USERS_IN_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
-                Log.i("howMuch",howmuch+"");
-                ContentValues contentValues = new ContentValues();
-                Gson gson = new Gson();
-
-                for (int i = 0; i < items.size(); i++) {
-                    contentValues.put(DBHelper.KEY_ID_DIALOG, user_id);
-                    contentValues.put(DBHelper.KEY_TIME_MESSAGES,items.get(i).getDate());
-                    contentValues.put(DBHelper.KEY_OBJ, gson.toJson(items.get(i)));
-                    dataBase.insert(DBHelper.TABLE_MESSAGES, null, contentValues);
-                }
-                ContentValues contentValues1 = new ContentValues();
-                for (int i = 0; i < names.size(); i++) {
-                    contentValues1.put(DBHelper.KEY_ID_DIALOG, user_id);
-                    contentValues1.put(DBHelper.KEY_OBJ, gson.toJson(names.get(i)));
-                    long num=0;
-                    num=dataBase.insert(DBHelper.TABLE_USERS_IN_MESSAGES, null, contentValues1);
-                    Log.i("namesChat", "" + names.get(i).getFirst_name()+" "+num);
-                }
-                dataBase.setTransactionSuccessful();
-            }catch (Exception e){
-
-            }finally {
-                dataBase.endTransaction();
-            }
-            return null;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (adapter.fwd_mess.size() > 1) {
-            adapter.fwd_mess.remove(adapter.fwd_mess.size() - 1);
-            items = adapter.fwd_mess.get(adapter.fwd_mess.size() - 1);
-            adapter.notifyDataSetChanged();
-            recyclerView.scrollToPosition(adapter.pos.get(adapter.pos.size() - 1));
-            adapter.pos.remove(adapter.pos.size() - 1);
-        } else {
-            if (adapter.fwd_mess.size() == 1) {
-                items.clear();
-                items.addAll(adapter.reserv);
-                frwd=false;
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(adapter.pos.get(adapter.pos.size() - 1));
-                adapter.fwd_mess.clear();
-                adapter.pos.remove(adapter.pos.size() - 1);
-            } else {
-                super.onBackPressed();
-            }
-        }
-    }
-
 
     public void nameRec(Dialogs contain_mess) {
         boolean chek=false;
@@ -400,12 +309,18 @@ public class DialogMessageActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        new UpdateDataBase(user_id,items,names).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+    }
+
     public void refresh(final int offset) {
         if (!frwd) {
             refreshLayout.setRefreshing(true);
 
             String TOKEN = preferencesManager.getToken();
-            Call<ServerResponse<ItemMess<ArrayList<Dialogs>>>> call = service.getHistory(TOKEN, 100, offset, user_id);
+            Call<ServerResponse<ItemMess<ArrayList<Dialogs>>>> call = service.getHistory(TOKEN, 100, offset, user_id == 0 ? chat_id + 2000000000 : user_id);
 
             call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<Dialogs>>>>() {
                 @Override
@@ -479,26 +394,6 @@ public class DialogMessageActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.message_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.titleee:
-                off = 0;
-                refresh(off);
-                return true;
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public static String convertMonth(int num) {
         String[] months = {"", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                 "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -551,9 +446,9 @@ public class DialogMessageActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                return new ViewHolder(View.inflate(DialogMessageActivity.this, R.layout.messin, null));
+                return new ViewHolder(View.inflate(getActivity(), R.layout.messin, null));
             } else {
-                return new ViewHolder(View.inflate(DialogMessageActivity.this, R.layout.messout, null));
+                return new ViewHolder(View.inflate(getActivity(), R.layout.messout, null));
             }
         }
 
@@ -577,13 +472,13 @@ public class DialogMessageActivity extends AppCompatActivity {
             }
 
             if (dialog.getRead_state() == 0) {
-                holder.foo.setBackgroundColor(ContextCompat.getColor(DialogMessageActivity.this, R.color.accent));
+                holder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent));
             }else {
                 holder.foo.setBackgroundColor(Color.WHITE);
             }
             for (int i=0;i<frwdMessages.size();i++){
                 if (dialog.getId()==frwdMessages.get(i)){
-                    holder.foo.setBackgroundColor(ContextCompat.getColor(DialogMessageActivity.this, R.color.primary_dark));
+                    holder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                 }
             }
             holder.line.removeAllViews();
@@ -593,12 +488,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                 holder.online.setVisibility(View.INVISIBLE);
             }
             if (preferencesManager.getSettingPhotoUserOn()) {
-                Picasso.with(DialogMessageActivity.this)
+                Picasso.with(getActivity())
                         .load(user.getPhoto_100())
                         .transform(new CircularTransformation())
                         .into(holder.photo);
             } else {
-                Picasso.with(DialogMessageActivity.this)
+                Picasso.with(getActivity())
                         .load(R.drawable.soviet100)
                         .transform(new CircularTransformation())
                         .into(holder.photo);
@@ -617,7 +512,7 @@ public class DialogMessageActivity extends AppCompatActivity {
                             if (dialog.getRead_state()==1) {
                                 viewHolder.foo.setBackgroundColor(Color.WHITE);
                             }else {
-                                viewHolder.foo.setBackgroundColor(ContextCompat.getColor(DialogMessageActivity.this, R.color.accent));
+                                viewHolder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent));
                             }
                             chek=true;
                             break;
@@ -626,7 +521,7 @@ public class DialogMessageActivity extends AppCompatActivity {
 
                     if (!chek){
                         frwdMessages.add (dialog.getId());
-                        viewHolder.foo.setBackgroundColor(ContextCompat.getColor(DialogMessageActivity.this, R.color.primary_dark));
+                        viewHolder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                     }
 
                     if (frwdMessages.size()>0){
@@ -640,7 +535,31 @@ public class DialogMessageActivity extends AppCompatActivity {
                         forwardButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivity(DialogsActivity.getIntent(DialogMessageActivity.this,true,false));
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                LayoutInflater inflater = getActivity().getLayoutInflater();
+                                View view = inflater.inflate(R.layout.layout_alert_dialog_forward_question, null);
+                                view.findViewById(R.id.dialog_variant).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        alertDialog.dismiss();
+                                        navigateTo().state(Add.newActivity(new DialogListState(new Gson().toJson(frwdMessages)), BaseActivity.class));
+                                        frwdMessages.clear();
+                                        adapter.notifyDataSetChanged();
+                                        mess.setHint (getString(R.string.WRITE_MESSAGE));
+                                    }
+                                });
+                                view.findViewById(R.id.friend_variant).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        alertDialog.dismiss();
+                                        navigateTo().state(Add.newActivity(new FriendListState(new Gson().toJson(frwdMessages)), BaseActivity.class));
+                                        frwdMessages.clear();
+                                        adapter.notifyDataSetChanged();
+                                        mess.setHint (getString(R.string.WRITE_MESSAGE));
+                                    }
+                                });
+                                alertDialog.setView(view);
+                                alertDialog.show();
                             }
                         });
                     }else {
@@ -655,12 +574,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            holder.photo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                        startActivity(UserActivity.getIntent(DialogMessageActivity.this,userFinal.getId(),new Gson().toJson(userFinal)));
-                }
-            });
+//            holder.photo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    startActivity(UserActivity.getIntent(DialogMessageActivity.this,userFinal.getId(),new Gson().toJson(userFinal)));
+//                }
+//            });
             year.setTimeZone(TimeZone.getDefault());
             month.setTimeZone(TimeZone.getDefault());
             day.setTimeZone(TimeZone.getDefault());
@@ -714,7 +633,7 @@ public class DialogMessageActivity extends AppCompatActivity {
                         while (matchedText.contains("\n")) {
                             matchedText = matchedText.replace("\n", "");
                         }
-                        Util.goToUrl(DialogMessageActivity.this, matchedText);
+                        Util.goToUrl(getActivity(), matchedText);
                     }
                 }
             });
@@ -722,7 +641,7 @@ public class DialogMessageActivity extends AppCompatActivity {
             Log.wtf ("ooo",bodyContainer);
 
             if (dialog.getFwd_messages().size() != 0) {
-                LayoutInflater inflater = getLayoutInflater();
+                LayoutInflater inflater = getActivity().getLayoutInflater();
                 View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                 TextView text = (TextView) cont.findViewById(R.id.textView3);
                 text.setTextColor(Color.BLUE);
@@ -731,14 +650,15 @@ public class DialogMessageActivity extends AppCompatActivity {
                 text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        frwd=true;
-                        ArrayList<Dialogs> fwrd = new ArrayList<>();
-                        for (int i = 0; i < dialog.getFwd_messages().size(); i++)
-                            fwrd.add(dialog.getFwd_messages().get(i));
-                        fwd_mess.add(fwrd);
-                        pos.add(finalPos);
-                        items = fwd_mess.get(fwd_mess.size() - 1);
-                        adapter.notifyDataSetChanged();
+//                        frwd=true;
+//                        ArrayList<Dialogs> fwrd = new ArrayList<>();
+//                        for (int i = 0; i < dialog.getFwd_messages().size(); i++)
+//                            fwrd.add(dialog.getFwd_messages().get(i));
+//                        fwd_mess.add(fwrd);
+//                        pos.add(finalPos);
+//                        items = fwd_mess.get(fwd_mess.size() - 1);
+//                        adapter.notifyDataSetChanged();
+                        navigateTo().state(Add.newActivity(new ForwardMessagesState(new Gson().toJson(dialog.getFwd_messages()), new Gson().toJson(names)), BaseActivity.class));
                     }
                 });
             }
@@ -769,13 +689,13 @@ public class DialogMessageActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                            LayoutInflater inflater = getLayoutInflater();
+                            LayoutInflater inflater = getActivity().getLayoutInflater();
                             View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                             ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
                             TextView text = (TextView) cont.findViewById(R.id.textView3);
                             text.setText(getString(R.string.PHOTO));
                             final String finalPhoto = photo;
-                            Picasso.with(DialogMessageActivity.this)
+                            Picasso.with(getActivity())
                                     .load(photomess)
                                     .placeholder(R.drawable.loadshort)
                                     .error(R.drawable.errorshort)
@@ -784,7 +704,7 @@ public class DialogMessageActivity extends AppCompatActivity {
                             photochka.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    new ImageViewer.Builder(DialogMessageActivity.this, new String[]{finalPhoto} )
+                                    new ImageViewer.Builder(getActivity(), new String[]{finalPhoto} )
                                             .show();
                                 }
                             });
@@ -794,12 +714,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                         break;
                     }
                     case "sticker":{
-                        LayoutInflater inflater = getLayoutInflater();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
                         TextView text = (TextView) cont.findViewById(R.id.textView3);
                         text.setText(R.string.STICKER);
-                        Picasso.with(DialogMessageActivity.this)
+                        Picasso.with(getActivity())
                                 .load(dialog.getAttachments().get(i).getSticker().getPhoto_256())
                                 .placeholder(R.drawable.loadshort)
                                 .error(R.drawable.errorshort)
@@ -814,12 +734,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                         break;
                     }
                     case "video":{
-                        LayoutInflater inflater = getLayoutInflater();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
                         TextView text = (TextView) cont.findViewById(R.id.textView3);
                         text.setText(dialog.getAttachments().get(i).getVideo().getTitle());
-                        Picasso.with(DialogMessageActivity.this)
+                        Picasso.with(getActivity())
                                 .load(dialog.getAttachments().get(i).getVideo().getPhoto_320())
                                 .placeholder(R.drawable.loadshort)
                                 .error(R.drawable.errorshort)
@@ -859,19 +779,19 @@ public class DialogMessageActivity extends AppCompatActivity {
                         break;
                     }
                     case "doc":{
-                        LayoutInflater inflater = getLayoutInflater();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
                         TextView text = (TextView) cont.findViewById(R.id.textView3);
                         text.setText(dialog.getAttachments().get(i).getDoc().getTitle());
                         if (dialog.getAttachments().get(i).getDoc().getType() == 1) {
-                            Picasso.with(DialogMessageActivity.this)
+                            Picasso.with(getActivity())
                                     .load(R.drawable.doc)
                                     .resize(150, 150)
                                     .centerCrop()
                                     .into(photochka);
                         } else {
-                            Picasso.with(DialogMessageActivity.this)
+                            Picasso.with(getActivity())
                                     .load(R.drawable.zip)
                                     .resize(150, 150)
                                     .centerCrop()
@@ -891,7 +811,7 @@ public class DialogMessageActivity extends AppCompatActivity {
                         break;
                     }
                     case "audio":{
-                        LayoutInflater inflater = getLayoutInflater();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_audio_dinamic, null);
                         TextView text = (TextView) cont.findViewById(R.id.textView);
                         text.setText(dialog.getAttachments().get(i).getAudio().getArtist() + " - " + dialog.getAttachments().get(i).getAudio().getTitle());
@@ -905,35 +825,35 @@ public class DialogMessageActivity extends AppCompatActivity {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (DialogsActivity.mediaPlayer != null) {
-                                    DialogsActivity.mediaPlayer.seekTo(DialogsActivity.mediaPlayer.getCurrentPosition() - 5000);
+                                if (BaseActivity.mediaPlayer != null) {
+                                    BaseActivity.mediaPlayer.seekTo(BaseActivity.mediaPlayer.getCurrentPosition() - 5000);
                                 }
                             }
                         });
                         button1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (DialogsActivity.mediaPlayer != null) {
-                                    if (DialogsActivity.mediaPlayer.getCurrentPosition() == 0) {
+                                if (BaseActivity.mediaPlayer != null) {
+                                    if (BaseActivity.mediaPlayer.getCurrentPosition() == 0) {
                                         try {
-                                            DialogsActivity.mediaPlayer.release();
-                                            DialogsActivity.mediaPlayer = null;
-                                            DialogsActivity.mediaPlayer = new MediaPlayer();
-                                            DialogsActivity.mediaPlayer.setDataSource(url);
-                                            DialogsActivity.mediaPlayer.prepare();
-                                            DialogsActivity.mediaPlayer.start();
+                                            BaseActivity.mediaPlayer.release();
+                                            BaseActivity.mediaPlayer = null;
+                                            BaseActivity.mediaPlayer = new MediaPlayer();
+                                            BaseActivity.mediaPlayer.setDataSource(url);
+                                            BaseActivity.mediaPlayer.prepare();
+                                            BaseActivity.mediaPlayer.start();
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                     } else {
-                                        DialogsActivity.mediaPlayer.start();
+                                        BaseActivity.mediaPlayer.start();
                                     }
                                 } else {
                                     try {
-                                        DialogsActivity.mediaPlayer = new MediaPlayer();
-                                        DialogsActivity.mediaPlayer.setDataSource(url);
-                                        DialogsActivity.mediaPlayer.prepare();
-                                        DialogsActivity.mediaPlayer.start();
+                                        BaseActivity.mediaPlayer = new MediaPlayer();
+                                        BaseActivity.mediaPlayer.setDataSource(url);
+                                        BaseActivity.mediaPlayer.prepare();
+                                        BaseActivity.mediaPlayer.start();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -944,25 +864,25 @@ public class DialogMessageActivity extends AppCompatActivity {
                         button2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (DialogsActivity.mediaPlayer != null) {
-                                    DialogsActivity.mediaPlayer.pause();
+                                if (BaseActivity.mediaPlayer != null) {
+                                    BaseActivity.mediaPlayer.pause();
                                 }
                             }
                         });
                         button3.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (DialogsActivity.mediaPlayer != null) {
-                                    DialogsActivity.mediaPlayer.seekTo(DialogsActivity.mediaPlayer.getCurrentPosition() + 5000);
+                                if (BaseActivity.mediaPlayer != null) {
+                                    BaseActivity.mediaPlayer.seekTo(BaseActivity.mediaPlayer.getCurrentPosition() + 5000);
                                 }
                             }
                         });
                         button4.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (DialogsActivity.mediaPlayer != null) {
-                                    DialogsActivity.mediaPlayer.pause();
-                                    DialogsActivity.mediaPlayer.seekTo(0);
+                                if (BaseActivity.mediaPlayer != null) {
+                                    BaseActivity.mediaPlayer.pause();
+                                    BaseActivity.mediaPlayer.seekTo(0);
                                 }
                             }
                         });
@@ -973,12 +893,12 @@ public class DialogMessageActivity extends AppCompatActivity {
                         break;
                     }
                     case "gift":{
-                        LayoutInflater inflater = getLayoutInflater();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
                         TextView text = (TextView) cont.findViewById(R.id.textView3);
                         text.setText(R.string.GIFT);
-                        Picasso.with(DialogMessageActivity.this)
+                        Picasso.with(getActivity())
                                 .load(dialog.getAttachments().get(i).getGift().getThumb_256())
                                 .placeholder(R.drawable.loadshort)
                                 .error(R.drawable.errorshort)
@@ -994,13 +914,60 @@ public class DialogMessageActivity extends AppCompatActivity {
             holder.body.setAutoLinkText(bodyContainer);
             if (dialog.getAction()!=null){
                 if (dialog.getAction().equals("chat_kick_user"))
-                holder.body.setAutoLinkText(getString(R.string.left_chat));
+                    holder.body.setAutoLinkText(getString(R.string.left_chat));
             }
         }
 
         @Override
         public int getItemCount() {
             return items.size();
+        }
+    }
+
+    class UpdateDataBase extends AsyncTask<Void, Void, Void> {
+        ArrayList<Dialogs> items;
+        ArrayList<User> names;
+        int user_id;
+        public UpdateDataBase (int id,ArrayList<Dialogs> itemArrayList, ArrayList<User> userArrayList){
+            items = new ArrayList<>();
+            names = new ArrayList<>();
+            items.addAll(itemArrayList);
+            names.addAll(userArrayList);
+            user_id=id;
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            dataBase.beginTransaction();
+            try {
+                int howmuch=0;
+                howmuch=dataBase.delete(DBHelper.TABLE_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
+                Log.i("howMuch",howmuch+"");
+                howmuch=dataBase.delete(DBHelper.TABLE_USERS_IN_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
+                Log.i("howMuch",howmuch+"");
+                ContentValues contentValues = new ContentValues();
+                Gson gson = new Gson();
+
+                for (int i = 0; i < items.size(); i++) {
+                    contentValues.put(DBHelper.KEY_ID_DIALOG, user_id);
+                    contentValues.put(DBHelper.KEY_TIME_MESSAGES,items.get(i).getDate());
+                    contentValues.put(DBHelper.KEY_OBJ, gson.toJson(items.get(i)));
+                    dataBase.insert(DBHelper.TABLE_MESSAGES, null, contentValues);
+                }
+                ContentValues contentValues1 = new ContentValues();
+                for (int i = 0; i < names.size(); i++) {
+                    contentValues1.put(DBHelper.KEY_ID_DIALOG, user_id);
+                    contentValues1.put(DBHelper.KEY_OBJ, gson.toJson(names.get(i)));
+                    long num=0;
+                    num=dataBase.insert(DBHelper.TABLE_USERS_IN_MESSAGES, null, contentValues1);
+                    Log.i("namesChat", "" + names.get(i).getFirst_name()+" "+num);
+                }
+                dataBase.setTransactionSuccessful();
+            }catch (Exception e){
+
+            }finally {
+                dataBase.endTransaction();
+            }
+            return null;
         }
     }
 }

@@ -24,7 +24,7 @@ public interface VKService {
     Call<ServerResponse<ArrayList<User>>> getUser(@Query("access_token") String access_token,
                                                   @Query("user_ids") String user_ids,
                                                   @Query("fields") String fields);
-    @GET("messages.getDialogs?v=5.57&preview_length=20")
+    @GET("messages.getDialogs?v=5.57")
     Call<ServerResponse<ItemMess<ArrayList<Item>>>> getDialogs (@Query("access_token") String access_token,
                                                                 @Query("count") int count,
                                                                 @Query("offset") int offset);
@@ -50,7 +50,6 @@ public interface VKService {
                                                                            @Query("videos") String videos);
     @GET("friends.get?&v=5.60&order=hints&name_case=nom")
     Call<ServerResponse<ItemMess<ArrayList<User>>>> getFriends (@Query("access_token") String access_token,
-                                                                @Query("user_id") int user_id,
                                                                 @Query("fields") String fields);
     @GET ("photos.get?&v=5.60&count=1000&album_id=profile&rev=1")
     Call<ServerResponse<ItemMess<ArrayList<PhotoMess>>>> getPhotos (@Query("access_token") String access_token,

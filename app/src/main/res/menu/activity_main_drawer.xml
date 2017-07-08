@@ -5,7 +5,7 @@
         <item
             android:id="@+id/nav_dialogs"
             android:icon="@drawable/messageicon"
-            android:title="@string/dialogs" />
+            android:title="@string/title_dialogs" />
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/friendicon"

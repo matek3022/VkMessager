@@ -1,10 +1,12 @@
 package com.example.app.vkobjects;
 
+import java.io.Serializable;
+
 /**
  * Created by Каракатица on 07.10.2016.
  */
 
-public class User  {
+public class User implements Serializable {
 
     public User (String fn,String ln, String ph, int on) {
         first_name=fn;

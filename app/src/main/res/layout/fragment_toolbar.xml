@@ -22,12 +22,4 @@
             android:layout_centerInParent="true" />
 
     </android.support.v7.widget.Toolbar>
-
-    <View
-        android:id="@+id/shadow"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:visibility="gone"
-        android:background="@drawable/toolbar_dropshadow" />
-
 </android.support.design.widget.AppBarLayout>

@@ -1,31 +1,16 @@
 package com.example.app.vkobjects;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Каракатица on 08.10.2016.
  */
 
-public class Dialogs implements Parcelable {
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+public class Dialogs implements Serializable {
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(access_token);
-        dest.writeInt(id);
-        dest.writeLong(date);
-        dest.writeInt(out);
-        dest.writeInt(user_id);
-        dest.writeInt(read_state);
-        dest.writeString(title);
-        dest.writeString(body);
-    }
     public  Dialogs (Parcel in){
         access_token = in.readString();
         id = in.readInt();
@@ -112,15 +97,4 @@ public class Dialogs implements Parcelable {
         this.title = title;
     }
 
-    public static Creator<Dialogs> CREATOR = new Creator<Dialogs>() {
-        @Override
-        public Dialogs createFromParcel(Parcel source) {
-            return new Dialogs(source);
-        }
-
-        @Override
-        public Dialogs[] newArray(int size) {
-            return new Dialogs[size];
-        }
-    };
 }

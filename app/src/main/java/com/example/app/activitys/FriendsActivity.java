@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
-import com.example.app.fragments.FriendListFragment;
+import com.example.app.fragments.FriendPageFragment;
 import com.example.app.managers.PreferencesManager;
 import com.example.app.sqlite.DBHelper;
 import com.example.app.transformation.CircularTransformation;
@@ -96,7 +96,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
                 @Override
                 public void onClick(View v) {
 
-                    startActivity(UserActivity.getIntent(FriendsActivity.this,iuser.getId(),uidgson));
+//                    startActivity(UserActivity.getIntent(FriendsActivity.this,iuser.getId(),uidgson));
                 }
             });
             if (iuser.getOnline()==1){
@@ -216,7 +216,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
     private void refresh(int user_id) {
         refreshLayout.setRefreshing(true);
         String TOKEN = preferencesManager.getToken();
-        Call<ServerResponse<ItemMess<ArrayList<User>>>> call = service.getFriends(TOKEN, user_id, "photo_100,photo_200,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
+        Call<ServerResponse<ItemMess<ArrayList<User>>>> call = service.getFriends(TOKEN, "photo_100,photo_200,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
 
         call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<User>>>>() {
             @Override
@@ -256,7 +256,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
 
         @Override
         public Fragment getItem(int position) {
-            return FriendListFragment.newInstance(position, new Gson().toJson(info));
+            return FriendPageFragment.newInstance(position, new Gson().toJson(info));
         }
 
         @Override
@@ -309,7 +309,7 @@ public class FriendsActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.nav_dialogs) {
-            startActivity(DialogsActivity.getIntent(FriendsActivity.this,false,true));
+//            startActivity(DialogsActivity.getIntent(FriendsActivity.this,false,true));
             FriendsActivity.this.finish();
 
         } else if (id == R.id.nav_friends) {

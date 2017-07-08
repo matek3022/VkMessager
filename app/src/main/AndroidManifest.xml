@@ -15,14 +15,6 @@
         <activity
             android:name=".activitys.LoginActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activitys.DialogsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activitys.DialogMessageActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

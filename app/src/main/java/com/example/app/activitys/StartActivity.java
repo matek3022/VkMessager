@@ -18,12 +18,13 @@ public class StartActivity extends AppCompatActivity {
             startActivity(LoginActivity.getIntent(StartActivity.this,getIntent().getBooleanExtra(EXTRA_LOGOUT,true)));
             StartActivity.this.finish();
         }else {
-            startActivity(DialogsActivity.getIntent(StartActivity.this,false,false));
+//            startActivity(DialogsActivity.getIntent(StartActivity.this,false,false));
+            startActivity(new Intent(this, BaseActivity.class));
             StartActivity.this.finish();
         }
     }
 
-    static Intent getIntent (Context context, boolean logout,boolean clearStack){
+    public static Intent getIntent (Context context, boolean logout,boolean clearStack){
         Intent intent = new Intent(context, StartActivity.class);
         intent.putExtra(EXTRA_LOGOUT,logout);
         if (clearStack){

@@ -6,8 +6,7 @@ import com.example.app.managers.PreferencesManager;
 import com.example.app.sqlite.DBHelper;
 import com.example.app.utils.VKService;
 import com.facebook.drawee.backends.pipeline.Fresco;
-
-import java.util.ArrayList;
+import com.vk.sdk.VKSdk;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class App extends Application {
-    public static final ArrayList <Integer> frwdMessages = new ArrayList<>();
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.vk.com/method/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,6 +24,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        VKSdk.initialize(getApplicationContext());
         Fresco.initialize(getApplicationContext());
         DBHelper.init(getApplicationContext());
         PreferencesManager.init(getApplicationContext());

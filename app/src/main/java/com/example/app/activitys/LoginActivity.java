@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 //        Intent intent = new Intent();
 //        intent.setClass(getApplicationContext(), DialogsActivity.class);
         LoginActivity.this.finish();
-        startActivity(DialogsActivity.getIntent(getApplicationContext(),false,false));
+//        startActivity(DialogsActivity.getIntent(getApplicationContext(),false,false));
+        startActivity(new Intent(this, BaseActivity.class));
     }
 }

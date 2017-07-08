@@ -20,8 +20,8 @@
     <string name="VOID_MESSAGE">Пустое сообщение</string>
     <string name="WRITE_MESSAGE">Написать сообщение</string>
     <string name="YOU">"Вы: "</string>
-    <string name="action_settings">Настройки</string>
-    <string name="dialogs">Диалоги</string>
+    <string name="title_settings_app">Настройки приложения</string>
+    <string name="title_dialogs">Диалоги</string>
     <string name="display_attached_photo">Отображать прикрепленные фото</string>
     <string name="friend_list">Список друзей</string>
     <string name="out">Нажми на меня</string>

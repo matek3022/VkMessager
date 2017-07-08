@@ -5,48 +5,40 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 
 import com.example.app.R;
+import com.example.app.fragments.SettingFragment;
+import com.example.app.fragments.ToolbarFragment;
 
 import me.ilich.juggler.gui.JugglerFragment;
-import me.ilich.juggler.states.ContentToolbarNavigationState;
+import me.ilich.juggler.states.ContentBelowToolbarState;
 import me.ilich.juggler.states.VoidParams;
 
 /**
- * Created by Sergey Elizarov (sergey.elizarov@altarix.ru)
- * on 28.04.17 12:26.
+ * Created by matek on 08.07.2017.
  */
 
-public class InnovationListState extends ContentToolbarNavigationState<VoidParams> {
+public class SettingState extends ContentBelowToolbarState<VoidParams> {
 
-    public InnovationListState() {
+    public SettingState() {
         super(VoidParams.instance());
     }
 
     @Override
     public String getTitle(Context context, VoidParams params) {
-        return "title";
+        return context.getString(R.string.title_settings_app);
     }
 
     @Override
     public Drawable getUpNavigationIcon(Context context, VoidParams params) {
-        return context.getResources().getDrawable(R.drawable.circle);
+        return context.getResources().getDrawable(R.drawable.ic_navigate_back);
     }
 
     @Override
     protected JugglerFragment onConvertContent(VoidParams params, @Nullable JugglerFragment fragment) {
-//        return InnovationListFragment.newInstance();
-            return null;
+        return new SettingFragment();
     }
 
     @Override
     protected JugglerFragment onConvertToolbar(VoidParams params, @Nullable JugglerFragment fragment) {
-        return null;
-//        return ToolbarShadowFragment.createNavigation();
-    }
-
-
-    @Override
-    protected JugglerFragment onConvertNavigation(VoidParams params, @Nullable JugglerFragment fragment) {
-        return null;
-//        return NavigationFragment.create(R.id.menu_innovations);
+        return ToolbarFragment.createNavigation();
     }
 }

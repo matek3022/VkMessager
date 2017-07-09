@@ -142,7 +142,8 @@ public class FriendListFragment extends JugglerFragment {
                 info.add(gson.fromJson(cursor.getString(user), User.class));
                 cursor.moveToNext();
             }
-
+            usersFinal.clear();
+            usersFinal.addAll(info);
             refresh();
         } else {
             refresh();

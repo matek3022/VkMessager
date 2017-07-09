@@ -18,8 +18,8 @@ import me.ilich.juggler.states.State;
 
 public class ForwardMessagesState extends ContentBelowToolbarState<ForwardMessagesState.Params> {
 
-    public ForwardMessagesState(String dialogs, String users) {
-        super(new ForwardMessagesState.Params(dialogs, users));
+    public ForwardMessagesState(String dialogs, String users, int chatId) {
+        super(new ForwardMessagesState.Params(dialogs, users, chatId));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ForwardMessagesState extends ContentBelowToolbarState<ForwardMessag
 
     @Override
     protected JugglerFragment onConvertContent(ForwardMessagesState.Params params, @Nullable JugglerFragment fragment) {
-        return ForwardMessagesFragment.getInstance(params.dialogs, params.users);
+        return ForwardMessagesFragment.getInstance(params.dialogs, params.users, params.chatId);
     }
 
     @Override
@@ -45,9 +45,11 @@ public class ForwardMessagesState extends ContentBelowToolbarState<ForwardMessag
     static class Params extends State.Params{
         String dialogs;
         String users;
-        Params(String dialogs, String users){
+        int chatId;
+        Params(String dialogs, String users, int chatId){
             this.dialogs = dialogs;
             this.users = users;
+            this.chatId = chatId;
         }
     }
 }

@@ -20,6 +20,10 @@ public class PreferencesManager {
     public static String USERID = "uid";
     public static String USERGSON = "uidgson";
 
+    private static final String CRYPT_KEY = "cryptKey";
+    private static final String IS_CRYPT = "isCrypt";
+
+
     public static void init (Context context){
         instance = new PreferencesManager(context);
     }
@@ -69,7 +73,15 @@ public class PreferencesManager {
     }
 
     public String getCryptKey(){
-        return settingsPref.getString("cryptKey","");
+        return settingsPref.getString(CRYPT_KEY,"");
+    }
+
+    public String getCryptKeyById(int id) {
+        return settingsPref.getString(CRYPT_KEY + id, "");
+    }
+
+    public boolean getIsCryptById(int id) {
+        return settingsPref.getBoolean(IS_CRYPT + id, false);
     }
 
     public String getCryptString(){
@@ -118,7 +130,19 @@ public class PreferencesManager {
 
     public void setCryptKey (String key) {
         SharedPreferences.Editor editor = settingsPref.edit();
-        editor.putString("cryptKey",key);
+        editor.putString(CRYPT_KEY,key);
+        editor.apply();
+    }
+
+    public void setCryptKeyById(int id, String key) {
+        SharedPreferences.Editor editor = settingsPref.edit();
+        editor.putString(CRYPT_KEY+id, key);
+        editor.apply();
+    }
+
+    public void setIsCryptById(int id, boolean isCrypt) {
+        SharedPreferences.Editor editor = settingsPref.edit();
+        editor.putBoolean(IS_CRYPT+id, isCrypt);
         editor.apply();
     }
 

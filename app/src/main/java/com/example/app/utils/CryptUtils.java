@@ -3,8 +3,6 @@ package com.example.app.utils;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.app.managers.PreferencesManager;
-
 import java.nio.ByteBuffer;
 
 /**
@@ -30,18 +28,22 @@ public class CryptUtils {
             , {1, 15, 13, 0, 5, 7, 10, 4, 9, 2, 3, 14, 6, 11, 8, 12}
     };
 
-    public static String cryptWritibleString(String str) {
-        byte[] cryptUnwritibleCryptString = cryptString(str);
+    public static String cryptWritibleString(String str, String key) {
+        byte[] cryptUnwritibleCryptString = cryptString(str, key);
         return Base64.encodeToString(cryptUnwritibleCryptString, Base64.DEFAULT);
     }
 
-    public static String decryptWritibleString(String str) {
-        return decryptString(Base64.decode(str, Base64.DEFAULT));
+    public static String decryptWritibleString(String str, String key) {
+        try {
+            String res = decryptString(Base64.decode(str, Base64.DEFAULT), key);
+            return res.equals("") ? str : res;
+        } catch (Exception e) {
+            return str;
+        }
     }
 
-    public static byte[] cryptString(String str) {
-        PreferencesManager preferencesManager = PreferencesManager.getInstance();
-        String key = preferencesManager.getCryptKey();
+    public static byte[] cryptString(String str, String localKey) {
+        String key = localKey;
         if (key.length() != 32) {
             for (int i = key.length(); i < 32; i++) {
                 key += "A";
@@ -61,9 +63,8 @@ public class CryptUtils {
         }
     }
 
-    public static String decryptString(byte[] crypt) {
-        PreferencesManager preferencesManager = PreferencesManager.getInstance();
-        String key = preferencesManager.getCryptKey();
+    public static String decryptString(byte[] crypt, String localKey) {
+        String key = localKey;
         if (key.length() != 32) {
             for (int i = key.length(); i < 32; i++) {
                 key += "A";
@@ -112,7 +113,6 @@ public class CryptUtils {
                 }
             }
         }
-        log(result.length);
         return result;
     }
 

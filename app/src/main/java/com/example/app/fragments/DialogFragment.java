@@ -1,7 +1,11 @@
 package com.example.app.fragments;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,12 +21,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,8 +84,8 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class DialogFragment extends JugglerFragment {
 
-    private static final String EXTRA_USER_ID="userID";
-    private static final String EXTRA_CHAT_ID="ChatID";
+    private static final String EXTRA_USER_ID = "userID";
+    private static final String EXTRA_CHAT_ID = "ChatID";
     private static final String EXTRA_FORWARD_MESS = "frwrd_mess";
 
     public static DialogFragment getInstance(int userId, int chatId, String forwardMess) {
@@ -88,25 +98,28 @@ public class DialogFragment extends JugglerFragment {
         return fragment;
     }
 
-    private ArrayList <Integer> frwdMessages = new ArrayList<>();
+    private ArrayList<Integer> frwdMessages = new ArrayList<>();
 
     private int user_id;
     private int chat_id;
     private String title;
     private boolean frwd;
-    Adapter adapter;
-    Button sendButton;
+    private Adapter adapter;
+    private Button sendButton;
     private RecyclerView recyclerView;
-    SwipyRefreshLayout refreshLayout;
-    int off;
-    ArrayList<Dialogs> items;
-    ArrayList<User> names;
-    ArrayList<Integer> namesIds;
-    SQLiteDatabase dataBase;
-    PreferencesManager preferencesManager;
-    EmojiconEditText mess;
-    Button forwardButton;
+    private SwipyRefreshLayout refreshLayout;
+    private int off;
+    private ArrayList<Dialogs> items;
+    private ArrayList<User> names;
+    private ArrayList<Integer> namesIds;
+    private SQLiteDatabase dataBase;
+    private PreferencesManager preferencesManager;
+    private EmojiconEditText mess;
+    private Button forwardButton;
     private String inputForwardMess;
+
+    private boolean crypting;
+    private String cryptKey;
 
     @Nullable
     @Override
@@ -117,13 +130,18 @@ public class DialogFragment extends JugglerFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        frwd=false;
+        frwd = false;
         dataBase = DBHelper.getInstance().getWritableDatabase();
         preferencesManager = PreferencesManager.getInstance();
         user_id = getArguments().getInt(EXTRA_USER_ID, 0);
         chat_id = getArguments().getInt(EXTRA_CHAT_ID, 0);
+        crypting = preferencesManager.getIsCryptById(chat_id == 0 ? user_id : 2000000000 + chat_id);
+        cryptKey = preferencesManager.getCryptKeyById(chat_id == 0 ? user_id : 2000000000 + chat_id);
+        if (cryptKey.equals("")) cryptKey = preferencesManager.getCryptKey();
         inputForwardMess = getArguments().getString(EXTRA_FORWARD_MESS, null);
-        if (inputForwardMess != null) frwdMessages = new Gson().fromJson(inputForwardMess, new TypeToken<ArrayList<Integer>>(){}.getType());
+        if (inputForwardMess != null)
+            frwdMessages = new Gson().fromJson(inputForwardMess, new TypeToken<ArrayList<Integer>>() {
+            }.getType());
         items = new ArrayList<>();
         names = new ArrayList<>();
         namesIds = new ArrayList<>();
@@ -134,13 +152,13 @@ public class DialogFragment extends JugglerFragment {
         refreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.refresh);
         sendButton = (Button) view.findViewById(R.id.button);
         forwardButton = (Button) view.findViewById(R.id.fab);
-        ImageView imageEmoji = (ImageView)view.findViewById(R.id.emoji_button);
+        ImageView imageEmoji = (ImageView) view.findViewById(R.id.emoji_button);
         imageEmoji.setImageResource(R.drawable.smiley);
-
-        EmojIconActions emojIconActions = new EmojIconActions(getActivity(), view.findViewById(R.id.rootContainer), mess,imageEmoji);
+        setHasOptionsMenu(true);
+        EmojIconActions emojIconActions = new EmojIconActions(getActivity(), view.findViewById(R.id.rootContainer), mess, imageEmoji);
         emojIconActions.ShowEmojIcon();
 
-        if (frwdMessages.size()>0) mess.setHint("Выбрано "+ frwdMessages.size());
+        if (frwdMessages.size() > 0) mess.setHint("Выбрано " + frwdMessages.size());
 
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.setStackFromEnd(true);
@@ -168,27 +186,28 @@ public class DialogFragment extends JugglerFragment {
             public void onClick(View v) {
                 if (!frwd) {
                     refreshLayout.setRefreshing(true);
-                    if ((!mess.getText().toString().equals(""))||(frwdMessages.size()>0)) {
+                    if ((!mess.getText().toString().equals("")) || (frwdMessages.size() > 0)) {
                         String message = mess.getText().toString();
+                        if (crypting) message = CryptUtils.cryptWritibleString(message, cryptKey);
                         mess.setText("");
                         int kek = user_id;
                         if (chat_id != 0) {
                             kek = 0;
                         }
 
-                        String strIdMess="";
-                        for (int i=0;i<frwdMessages.size();i++){
-                            strIdMess+=","+frwdMessages.get(i);
+                        String strIdMess = "";
+                        for (int i = 0; i < frwdMessages.size(); i++) {
+                            strIdMess += "," + frwdMessages.get(i);
                         }
 
                         String TOKEN = preferencesManager.getToken();
-                        Call<ServerResponse> call = service.sendMessage(TOKEN, kek, message, chat_id, 2000000000 + chat_id,strIdMess);
+                        Call<ServerResponse> call = service.sendMessage(TOKEN, kek, message, chat_id, 2000000000 + chat_id, strIdMess);
 
                         call.enqueue(new Callback<ServerResponse>() {
                             @Override
                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                                 frwdMessages.clear();
-                                mess.setHint (getString(R.string.WRITE_MESSAGE));
+                                mess.setHint(getString(R.string.WRITE_MESSAGE));
                                 off = 0;
                                 refresh(off);
                             }
@@ -208,66 +227,17 @@ public class DialogFragment extends JugglerFragment {
                                 getString(R.string.VOID_MESSAGE), Toast.LENGTH_SHORT);
                         toast.show();
                     }
-                }else {
-                    refreshLayout.setRefreshing(false);
-                }
-            }
-        });
-
-        sendButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                refreshLayout.setRefreshing(true);
-                if ((!mess.getText().toString().equals(""))||(frwdMessages.size()>0)) {
-                    String message = mess.getText().toString();
-                    message = CryptUtils.cryptWritibleString(message);
-                    mess.setText("");
-                    int kek = user_id;
-                    if (chat_id != 0) {
-                        kek = 0;
-                    }
-
-                    String strIdMess="";
-                    for (int i=0;i<frwdMessages.size();i++){
-                        strIdMess+=","+frwdMessages.get(i);
-                    }
-
-                    String TOKEN = preferencesManager.getToken();
-                    Call<ServerResponse> call = service.sendMessage(TOKEN, kek, message, chat_id, 2000000000 + chat_id,strIdMess);
-
-                    call.enqueue(new Callback<ServerResponse>() {
-                        @Override
-                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                            frwdMessages.clear();
-                            mess.setHint (getString(R.string.WRITE_MESSAGE));
-                            off = 0;
-                            refresh(off);
-                        }
-
-                        @Override
-                        public void onFailure(Call<ServerResponse> call, Throwable t) {
-                            refreshLayout.setRefreshing(false);
-                            Toast toast = Toast.makeText(getApplicationContext(),
-                                    getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        }
-                    });
                 } else {
                     refreshLayout.setRefreshing(false);
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            getString(R.string.VOID_MESSAGE), Toast.LENGTH_SHORT);
-                    toast.show();
                 }
-                return true;
             }
         });
 
-        Cursor cursor = dataBase.query(DBHelper.TABLE_MESSAGES,null,DBHelper.KEY_ID_DIALOG + " = ?",new String[]{user_id+""},null,null,DBHelper.KEY_TIME_MESSAGES);
-        Cursor cursor1 = dataBase.query(DBHelper.TABLE_USERS_IN_MESSAGES, null, DBHelper.KEY_ID_DIALOG + " = ?", new String[]{user_id+""}, null, null, DBHelper.KEY_ID);
-        Log.i("dataBase",cursor.getCount() + " "+ cursor1.getCount());
+        Cursor cursor = dataBase.query(DBHelper.TABLE_MESSAGES, null, DBHelper.KEY_ID_DIALOG + " = ?", new String[]{user_id + ""}, null, null, DBHelper.KEY_TIME_MESSAGES);
+        Cursor cursor1 = dataBase.query(DBHelper.TABLE_USERS_IN_MESSAGES, null, DBHelper.KEY_ID_DIALOG + " = ?", new String[]{user_id + ""}, null, null, DBHelper.KEY_ID);
+        Log.i("dataBase", cursor.getCount() + " " + cursor1.getCount());
         if (cursor.moveToFirst()) {
-            Log.i("dataBase",cursor.getCount() + " "+ cursor1.getCount());
+            Log.i("dataBase", cursor.getCount() + " " + cursor1.getCount());
             cursor1.moveToFirst();
             items.clear();
             names.clear();
@@ -283,7 +253,7 @@ public class DialogFragment extends JugglerFragment {
                 cursor1.moveToNext();
             }
             adapter.reserv.addAll(items);
-            off=0;
+            off = 0;
             refresh(off);
         } else {
             off = 0;
@@ -295,10 +265,10 @@ public class DialogFragment extends JugglerFragment {
     }
 
     public void nameRec(Dialogs contain_mess) {
-        boolean chek=false;
-        for (int i = 0; i < namesIds.size();i++){
-            if (namesIds.get(i)==contain_mess.getUser_id()){
-                chek=true;
+        boolean chek = false;
+        for (int i = 0; i < namesIds.size(); i++) {
+            if (namesIds.get(i) == contain_mess.getUser_id()) {
+                chek = true;
             }
         }
         if (!chek) {
@@ -312,7 +282,50 @@ public class DialogFragment extends JugglerFragment {
     @Override
     public void onPause() {
         super.onPause();
-        new UpdateDataBase(user_id,items,names).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        new UpdateDataBase(user_id, items, names).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.dialog_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.dialog_menu_reload:
+                off = 0;
+                refresh(off);
+                return true;
+            case R.id.dialog_menu_security:
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                final View view = getActivity().getLayoutInflater().inflate(R.layout.layout_alert_dialog_security_setting, null);
+                ((Switch) view.findViewById(R.id.switch_security)).setChecked(crypting);
+                ((Switch) view.findViewById(R.id.switch_security)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        crypting = b;
+                    }
+                });
+                ((EditText)view.findViewById(R.id.et_security)).setText(preferencesManager.getCryptKeyById(chat_id == 0 ? user_id : 2000000000 + chat_id));
+                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        preferencesManager.setIsCryptById(chat_id == 0 ? user_id : 2000000000 + chat_id, crypting);
+                        String localCryptKey = ((EditText)view.findViewById(R.id.et_security)).getText().toString();
+                        if (localCryptKey.equals("")) cryptKey = preferencesManager.getCryptKey();
+                        else cryptKey = localCryptKey;
+                        preferencesManager.setCryptKeyById(chat_id == 0 ? user_id : 2000000000 + chat_id, localCryptKey);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                alertDialog.setView(view);
+                alertDialog.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void refresh(final int offset) {
@@ -325,59 +338,66 @@ public class DialogFragment extends JugglerFragment {
             call.enqueue(new Callback<ServerResponse<ItemMess<ArrayList<Dialogs>>>>() {
                 @Override
                 public void onResponse(Call<ServerResponse<ItemMess<ArrayList<Dialogs>>>> call, Response<ServerResponse<ItemMess<ArrayList<Dialogs>>>> response) {
-                    ArrayList<Dialogs> l = response.body().getResponse().getitem();
-                    String people_id = "" + l.get(0).getUser_id();
-                    namesIds.clear();
-                    if (offset == 0) {
-                        items.clear();
-                        for (int i = 0; i<l.size();i++){
-                            nameRec(l.get(i));
-                            items.add(0,l.get(i));
-                        }
-                    } else {
-                        for (int i = 0; i<l.size();i++){
-                            nameRec(l.get(i));
-                            items.add(0,l.get(i));
-                        }
-                    }
-                    for (int i = 0; i < namesIds.size(); i++){
-                        people_id+=  "," + namesIds.get(i);
-                    }
-                    people_id += ", " + preferencesManager.getUserID();
-                    Log.i ("chek",people_id);
-                    refreshLayout.setRefreshing(false);
-
-                    String TOKEN = preferencesManager.getToken();
-                    Call<ServerResponse<ArrayList<User>>> call1 = service.getUser(TOKEN, people_id, "photo_100,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
-
-                    call1.enqueue(new Callback<ServerResponse<ArrayList<User>>>() {
-                        @Override
-                        public void onResponse(Call<ServerResponse<ArrayList<User>>> call1, Response<ServerResponse<ArrayList<User>>> response) {
-                            ArrayList<User> l = response.body().getResponse();
-                            if (offset == 0) {
-                                names.clear();
-                            }
+                    if (response.body().getResponse() != null) {
+                        ArrayList<Dialogs> l = response.body().getResponse().getitem();
+                        String people_id = "" + l.get(0).getUser_id();
+                        namesIds.clear();
+                        if (offset == 0) {
+                            items.clear();
                             for (int i = 0; i < l.size(); i++) {
-                                names.add(l.get(i));
+                                nameRec(l.get(i));
+                                items.add(0, l.get(i));
                             }
-                            refreshLayout.setRefreshing(false);
-                            recyclerView.scrollToPosition(items.size() - offset);
-                            adapter.fwd_mess.clear();
-                            adapter.reserv.clear();
-                            adapter.reserv.addAll(items);
-                            adapter.notifyDataSetChanged();
+                        } else {
+                            for (int i = 0; i < l.size(); i++) {
+                                nameRec(l.get(i));
+                                items.add(0, l.get(i));
+                            }
                         }
+                        for (int i = 0; i < namesIds.size(); i++) {
+                            people_id += "," + namesIds.get(i);
+                        }
+                        people_id += ", " + preferencesManager.getUserID();
+                        Log.i("chek", people_id);
+                        refreshLayout.setRefreshing(false);
 
-                        @Override
-                        public void onFailure(Call<ServerResponse<ArrayList<User>>> call1, Throwable t) {
-                            Log.wtf("chek", t.getLocalizedMessage());
-                            refreshLayout.setRefreshing(false);
-                            Toast toast = Toast.makeText(getApplicationContext(),
-                                    getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                        }
-                    });
+                        String TOKEN = preferencesManager.getToken();
+                        Call<ServerResponse<ArrayList<User>>> call1 = service.getUser(TOKEN, people_id, "photo_100,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
+
+                        call1.enqueue(new Callback<ServerResponse<ArrayList<User>>>() {
+                            @Override
+                            public void onResponse(Call<ServerResponse<ArrayList<User>>> call1, Response<ServerResponse<ArrayList<User>>> response) {
+                                ArrayList<User> l = response.body().getResponse();
+                                if (l != null) {
+                                    if (offset == 0) {
+                                        names.clear();
+                                    }
+                                    for (int i = 0; i < l.size(); i++) {
+                                        names.add(l.get(i));
+                                    }
+                                    refreshLayout.setRefreshing(false);
+                                    recyclerView.scrollToPosition(items.size() - offset);
+                                    adapter.fwd_mess.clear();
+                                    adapter.reserv.clear();
+                                    adapter.reserv.addAll(items);
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    refreshLayout.setRefreshing(false);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ServerResponse<ArrayList<User>>> call1, Throwable t) {
+                                refreshLayout.setRefreshing(false);
+                                Toast toast = Toast.makeText(getApplicationContext(),
+                                        getString(R.string.LOST_INTERNET_CONNECTION), Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
+                    } else {
+                        refreshLayout.setRefreshing(false);
+                    }
                 }
 
                 @Override
@@ -389,7 +409,7 @@ public class DialogFragment extends JugglerFragment {
                     toast.show();
                 }
             });
-        }else {
+        } else {
             refreshLayout.setRefreshing(false);
         }
     }
@@ -458,12 +478,12 @@ public class DialogFragment extends JugglerFragment {
             final int finalPos = position;
             User user = new User();
             for (int i = 0; i < names.size(); i++) {
-                if (dialog.getOut()==0) {
+                if (dialog.getOut() == 0) {
                     if (dialog.getUser_id() == names.get(i).getId()) {
                         user = names.get(i);
                         break;
                     }
-                }else {
+                } else {
                     if (dialog.getFrom_id() == names.get(i).getId()) {
                         user = names.get(i);
                         break;
@@ -473,11 +493,11 @@ public class DialogFragment extends JugglerFragment {
 
             if (dialog.getRead_state() == 0) {
                 holder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent));
-            }else {
+            } else {
                 holder.foo.setBackgroundColor(Color.WHITE);
             }
-            for (int i=0;i<frwdMessages.size();i++){
-                if (dialog.getId()==frwdMessages.get(i)){
+            for (int i = 0; i < frwdMessages.size(); i++) {
+                if (dialog.getId() == frwdMessages.get(i)) {
                     holder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                 }
             }
@@ -501,35 +521,35 @@ public class DialogFragment extends JugglerFragment {
             final User userFinal = user;
             final ViewHolder viewHolder = holder;
 
-            if (frwdMessages.size()==0) forwardButton.setVisibility(View.INVISIBLE);
+            if (frwdMessages.size() == 0) forwardButton.setVisibility(View.INVISIBLE);
             View.OnClickListener forwardListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     boolean chek = false;
-                    for (int i=0;i<frwdMessages.size();i++){
-                        if (frwdMessages.get(i)==dialog.getId()){
+                    for (int i = 0; i < frwdMessages.size(); i++) {
+                        if (frwdMessages.get(i) == dialog.getId()) {
                             frwdMessages.remove(i);
-                            if (dialog.getRead_state()==1) {
+                            if (dialog.getRead_state() == 1) {
                                 viewHolder.foo.setBackgroundColor(Color.WHITE);
-                            }else {
+                            } else {
                                 viewHolder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent));
                             }
-                            chek=true;
+                            chek = true;
                             break;
                         }
                     }
 
-                    if (!chek){
-                        frwdMessages.add (dialog.getId());
+                    if (!chek) {
+                        frwdMessages.add(dialog.getId());
                         viewHolder.foo.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                     }
 
-                    if (frwdMessages.size()>0){
-                        mess.setHint("Выбрано "+ frwdMessages.size());
-                    }else{
+                    if (frwdMessages.size() > 0) {
+                        mess.setHint("Выбрано " + frwdMessages.size());
+                    } else {
                         mess.setHint(getString(R.string.WRITE_MESSAGE));
                     }
-                    if (frwdMessages.size()>0){
+                    if (frwdMessages.size() > 0) {
                         forwardButton.setVisibility(View.VISIBLE);
                         forwardButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -544,7 +564,7 @@ public class DialogFragment extends JugglerFragment {
                                         navigateTo().state(Add.newActivity(new DialogListState(new Gson().toJson(frwdMessages)), BaseActivity.class));
                                         frwdMessages.clear();
                                         adapter.notifyDataSetChanged();
-                                        mess.setHint (getString(R.string.WRITE_MESSAGE));
+                                        mess.setHint(getString(R.string.WRITE_MESSAGE));
                                     }
                                 });
                                 view.findViewById(R.id.friend_variant).setOnClickListener(new View.OnClickListener() {
@@ -554,27 +574,21 @@ public class DialogFragment extends JugglerFragment {
                                         navigateTo().state(Add.newActivity(new FriendListState(new Gson().toJson(frwdMessages)), BaseActivity.class));
                                         frwdMessages.clear();
                                         adapter.notifyDataSetChanged();
-                                        mess.setHint (getString(R.string.WRITE_MESSAGE));
+                                        mess.setHint(getString(R.string.WRITE_MESSAGE));
                                     }
                                 });
                                 alertDialog.setView(view);
                                 alertDialog.show();
                             }
                         });
-                    }else {
+                    } else {
                         forwardButton.setVisibility(View.INVISIBLE);
                     }
                 }
             };
             holder.itemView.setOnClickListener(forwardListener);
             holder.body.setOnClickListener(forwardListener);
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    holder.body.setText(CryptUtils.decryptWritibleString(holder.body.getText().toString()));
-                    return true;
-                }
-            });
+
 //            holder.photo.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -639,7 +653,6 @@ public class DialogFragment extends JugglerFragment {
                 }
             });
             String bodyContainer = dialog.getBody();
-            Log.wtf ("ooo",bodyContainer);
 
             if (dialog.getFwd_messages().size() != 0) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -651,21 +664,13 @@ public class DialogFragment extends JugglerFragment {
                 text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        frwd=true;
-//                        ArrayList<Dialogs> fwrd = new ArrayList<>();
-//                        for (int i = 0; i < dialog.getFwd_messages().size(); i++)
-//                            fwrd.add(dialog.getFwd_messages().get(i));
-//                        fwd_mess.add(fwrd);
-//                        pos.add(finalPos);
-//                        items = fwd_mess.get(fwd_mess.size() - 1);
-//                        adapter.notifyDataSetChanged();
-                        navigateTo().state(Add.newActivity(new ForwardMessagesState(new Gson().toJson(dialog.getFwd_messages()), new Gson().toJson(names)), BaseActivity.class));
+                        navigateTo().state(Add.newActivity(new ForwardMessagesState(new Gson().toJson(dialog.getFwd_messages()), new Gson().toJson(names), chat_id == 0 ? user_id : 2000000000 + chat_id), BaseActivity.class));
                     }
                 });
             }
-            for (int i=0;i<dialog.getAttachments().size();i++){
-                switch (dialog.getAttachments().get(i).getType()){
-                    case "photo":{
+            for (int i = 0; i < dialog.getAttachments().size(); i++) {
+                switch (dialog.getAttachments().get(i).getType()) {
+                    case "photo": {
                         if (preferencesManager.getSettingPhotoChatOn()) {
                             String photo = "";
                             String photomess = "";
@@ -705,16 +710,16 @@ public class DialogFragment extends JugglerFragment {
                             photochka.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    new ImageViewer.Builder(getActivity(), new String[]{finalPhoto} )
+                                    new ImageViewer.Builder(getActivity(), new String[]{finalPhoto})
                                             .show();
                                 }
                             });
-                        }else{
-                            bodyContainer += "\n"+getString(R.string.PHOTO);
+                        } else {
+                            bodyContainer += "\n" + getString(R.string.PHOTO);
                         }
                         break;
                     }
-                    case "sticker":{
+                    case "sticker": {
                         LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
@@ -730,11 +735,11 @@ public class DialogFragment extends JugglerFragment {
                         holder.line.addView(cont);
                         break;
                     }
-                    case "link":{
-                        bodyContainer +="\n" + dialog.getAttachments().get(i).getLink().getUrl();
+                    case "link": {
+                        bodyContainer += "\n" + dialog.getAttachments().get(i).getLink().getUrl();
                         break;
                     }
-                    case "video":{
+                    case "video": {
                         LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
@@ -779,7 +784,7 @@ public class DialogFragment extends JugglerFragment {
                         });
                         break;
                     }
-                    case "doc":{
+                    case "doc": {
                         LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
@@ -811,7 +816,7 @@ public class DialogFragment extends JugglerFragment {
                         });
                         break;
                     }
-                    case "audio":{
+                    case "audio": {
                         LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_audio_dinamic, null);
                         TextView text = (TextView) cont.findViewById(R.id.textView);
@@ -889,11 +894,11 @@ public class DialogFragment extends JugglerFragment {
                         });
                         break;
                     }
-                    case "wall":{
+                    case "wall": {
                         bodyContainer += "\n" + dialog.getAttachments().get(i).getType();
                         break;
                     }
-                    case "gift":{
+                    case "gift": {
                         LayoutInflater inflater = getActivity().getLayoutInflater();
                         View cont = inflater.inflate(R.layout.attachment_conteiner_dinamic, null);
                         ImageView photochka = (ImageView) cont.findViewById(R.id.imageView);
@@ -912,8 +917,22 @@ public class DialogFragment extends JugglerFragment {
                 }
 
             }
+            if (crypting) bodyContainer = CryptUtils.decryptWritibleString(bodyContainer, cryptKey);
+            holder.body.setTextColor(getResources().getColor(crypting ? R.color.orange : R.color.black));
             holder.body.setAutoLinkText(bodyContainer);
-            if (dialog.getAction()!=null){
+            View.OnLongClickListener copyTextListener = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("", holder.body.getText().toString());
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getActivity(), "Текст скопирован в буфер", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            };
+            holder.itemView.setOnLongClickListener(copyTextListener);
+            holder.body.setOnLongClickListener(copyTextListener);
+            if (dialog.getAction() != null) {
                 if (dialog.getAction().equals("chat_kick_user"))
                     holder.body.setAutoLinkText(getString(R.string.left_chat));
             }
@@ -929,28 +948,30 @@ public class DialogFragment extends JugglerFragment {
         ArrayList<Dialogs> items;
         ArrayList<User> names;
         int user_id;
-        public UpdateDataBase (int id,ArrayList<Dialogs> itemArrayList, ArrayList<User> userArrayList){
+
+        public UpdateDataBase(int id, ArrayList<Dialogs> itemArrayList, ArrayList<User> userArrayList) {
             items = new ArrayList<>();
             names = new ArrayList<>();
             items.addAll(itemArrayList);
             names.addAll(userArrayList);
-            user_id=id;
+            user_id = id;
         }
+
         @Override
         protected Void doInBackground(Void... params) {
             dataBase.beginTransaction();
             try {
-                int howmuch=0;
-                howmuch=dataBase.delete(DBHelper.TABLE_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
-                Log.i("howMuch",howmuch+"");
-                howmuch=dataBase.delete(DBHelper.TABLE_USERS_IN_MESSAGES, DBHelper.KEY_ID_DIALOG +" = "+user_id, null);
-                Log.i("howMuch",howmuch+"");
+                int howmuch = 0;
+                howmuch = dataBase.delete(DBHelper.TABLE_MESSAGES, DBHelper.KEY_ID_DIALOG + " = " + user_id, null);
+                Log.i("howMuch", howmuch + "");
+                howmuch = dataBase.delete(DBHelper.TABLE_USERS_IN_MESSAGES, DBHelper.KEY_ID_DIALOG + " = " + user_id, null);
+                Log.i("howMuch", howmuch + "");
                 ContentValues contentValues = new ContentValues();
                 Gson gson = new Gson();
 
                 for (int i = 0; i < items.size(); i++) {
                     contentValues.put(DBHelper.KEY_ID_DIALOG, user_id);
-                    contentValues.put(DBHelper.KEY_TIME_MESSAGES,items.get(i).getDate());
+                    contentValues.put(DBHelper.KEY_TIME_MESSAGES, items.get(i).getDate());
                     contentValues.put(DBHelper.KEY_OBJ, gson.toJson(items.get(i)));
                     dataBase.insert(DBHelper.TABLE_MESSAGES, null, contentValues);
                 }
@@ -958,14 +979,14 @@ public class DialogFragment extends JugglerFragment {
                 for (int i = 0; i < names.size(); i++) {
                     contentValues1.put(DBHelper.KEY_ID_DIALOG, user_id);
                     contentValues1.put(DBHelper.KEY_OBJ, gson.toJson(names.get(i)));
-                    long num=0;
-                    num=dataBase.insert(DBHelper.TABLE_USERS_IN_MESSAGES, null, contentValues1);
-                    Log.i("namesChat", "" + names.get(i).getFirst_name()+" "+num);
+                    long num = 0;
+                    num = dataBase.insert(DBHelper.TABLE_USERS_IN_MESSAGES, null, contentValues1);
+                    Log.i("namesChat", "" + names.get(i).getFirst_name() + " " + num);
                 }
                 dataBase.setTransactionSuccessful();
-            }catch (Exception e){
+            } catch (Exception e) {
 
-            }finally {
+            } finally {
                 dataBase.endTransaction();
             }
             return null;

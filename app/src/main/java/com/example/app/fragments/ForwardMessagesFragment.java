@@ -1,5 +1,8 @@
 package com.example.app.fragments;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -9,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,12 +67,14 @@ public class ForwardMessagesFragment extends JugglerFragment {
 
     private static final String EXTRA_DIALOGS_LIST = "extra_dialogs_list";
     private static final String EXTRA_USERS_LIST = "extra_users_list";
+    private static final String EXTRA_CHAT_ID = "extra_chat_id";
 
-    public static ForwardMessagesFragment getInstance(String dialogs, String users) {
+    public static ForwardMessagesFragment getInstance(String dialogs, String users, int chatId) {
         ForwardMessagesFragment fragment = new ForwardMessagesFragment();
         Bundle args = new Bundle();
         args.putString(EXTRA_DIALOGS_LIST, dialogs);
         args.putString(EXTRA_USERS_LIST, users);
+        args.putInt(EXTRA_CHAT_ID, chatId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +84,10 @@ public class ForwardMessagesFragment extends JugglerFragment {
     private PreferencesManager preferencesManager;
     private RecyclerView recyclerView;
     private SwipyRefreshLayout refreshLayout;
+
+    private int chatId;
+    private boolean crypting;
+    private String cryptKey;
 
     @Nullable
     @Override
@@ -91,6 +99,9 @@ public class ForwardMessagesFragment extends JugglerFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         preferencesManager = PreferencesManager.getInstance();
+        chatId = getArguments().getInt(EXTRA_CHAT_ID);
+        crypting = preferencesManager.getIsCryptById(chatId);
+        cryptKey = preferencesManager.getCryptKeyById(chatId);
         view.findViewById(R.id.fab).setVisibility(View.GONE);
         view.findViewById(R.id.inputContainer).setVisibility(View.GONE);
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
@@ -202,13 +213,6 @@ public class ForwardMessagesFragment extends JugglerFragment {
             final User userFinal = user;
             final ViewHolder viewHolder = holder;
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    holder.body.setText(CryptUtils.decryptWritibleString(holder.body.getText().toString()));
-                    return true;
-                }
-            });
             year.setTimeZone(TimeZone.getDefault());
             month.setTimeZone(TimeZone.getDefault());
             day.setTimeZone(TimeZone.getDefault());
@@ -252,7 +256,6 @@ public class ForwardMessagesFragment extends JugglerFragment {
                 }
             });
             String bodyContainer = dialog.getBody();
-            Log.wtf("ooo", bodyContainer);
 
             if (dialog.getFwd_messages().size() != 0) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -272,7 +275,7 @@ public class ForwardMessagesFragment extends JugglerFragment {
 //                        pos.add(finalPos);
 //                        items = fwd_mess.get(fwd_mess.size() - 1);
 //                        adapter.notifyDataSetChanged();
-                        navigateTo().state(Add.newActivity(new ForwardMessagesState(new Gson().toJson(dialog.getFwd_messages()), new Gson().toJson(users)), BaseActivity.class));
+                        navigateTo().state(Add.newActivity(new ForwardMessagesState(new Gson().toJson(dialog.getFwd_messages()), new Gson().toJson(users), chatId), BaseActivity.class));
                     }
                 });
             }
@@ -525,7 +528,21 @@ public class ForwardMessagesFragment extends JugglerFragment {
                 }
 
             }
+            if (crypting) bodyContainer = CryptUtils.decryptWritibleString(bodyContainer, cryptKey);
+            holder.body.setTextColor(getResources().getColor(crypting ? R.color.orange : R.color.black));
             holder.body.setAutoLinkText(bodyContainer);
+            View.OnLongClickListener copyTextListener = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("", holder.body.getText().toString());
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getActivity(), "Текст скопирован в буфер", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            };
+            holder.itemView.setOnLongClickListener(copyTextListener);
+            holder.body.setOnLongClickListener(copyTextListener);
             if (dialog.getAction() != null) {
                 if (dialog.getAction().equals("chat_kick_user"))
                     holder.body.setAutoLinkText(getString(R.string.left_chat));

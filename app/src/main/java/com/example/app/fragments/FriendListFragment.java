@@ -51,6 +51,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class FriendListFragment extends JugglerFragment {
     static final String ARGUMENT_FORWARD_MESS = "arg_forward_mess";
+
     public static FriendListFragment getInstance(String forwardMess) {
 
         FriendListFragment pageFragment = new FriendListFragment();
@@ -114,7 +115,7 @@ public class FriendListFragment extends JugglerFragment {
                             info.add(usersFinal.get(i));
                         }
                     }
-                }else {
+                } else {
                     info.clear();
                     info.addAll(usersFinal);
                 }
@@ -170,7 +171,7 @@ public class FriendListFragment extends JugglerFragment {
                 usersFinal.clear();
                 usersFinal.addAll(l);
                 adapter.notifyDataSetChanged();
-                Log.wtf ("getCount",""+info.size());
+                Log.wtf("getCount", "" + info.size());
                 refreshLayout.setRefreshing(false);
             }
 
@@ -185,35 +186,34 @@ public class FriendListFragment extends JugglerFragment {
         });
     }
 
-    class UpdateDataBase extends AsyncTask<Void,Void,Void>{
+    class UpdateDataBase extends AsyncTask<Void, Void, Void> {
         int user_id;
         ArrayList<User> userUpdate;
-        public UpdateDataBase (int userId, ArrayList<User> userArrayList){
+
+        public UpdateDataBase(int userId, ArrayList<User> userArrayList) {
             userUpdate = new ArrayList<>();
             userUpdate.addAll(userArrayList);
-            user_id=userId;
+            user_id = userId;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (user_id==0) {
-                dataBase.beginTransaction();
-                try {
-                    dataBase.delete(DBHelper.TABLE_FRIENDS, null, null);
-                    ContentValues contentValues = new ContentValues();
-                    Gson gson = new Gson();
+            dataBase.beginTransaction();
+            try {
+                dataBase.delete(DBHelper.TABLE_FRIENDS, null, null);
+                ContentValues contentValues = new ContentValues();
+                Gson gson = new Gson();
 
-                    for (int i = 0; i < userUpdate.size(); i++) {
-                        contentValues.put(DBHelper.KEY_ID_USER, userUpdate.get(i).getId());
-                        contentValues.put(DBHelper.KEY_OBJ, gson.toJson(userUpdate.get(i)));
-                        dataBase.insert(DBHelper.TABLE_FRIENDS, null, contentValues);
-                    }
-                    dataBase.setTransactionSuccessful();
-                }catch (Exception e){
-
-                }finally {
-                    dataBase.endTransaction();
+                for (int i = 0; i < userUpdate.size(); i++) {
+                    contentValues.put(DBHelper.KEY_ID_USER, userUpdate.get(i).getId());
+                    contentValues.put(DBHelper.KEY_OBJ, gson.toJson(userUpdate.get(i)));
+                    dataBase.insert(DBHelper.TABLE_FRIENDS, null, contentValues);
                 }
+                dataBase.setTransactionSuccessful();
+            } catch (Exception e) {
+
+            } finally {
+                dataBase.endTransaction();
             }
             return null;
         }
@@ -250,7 +250,7 @@ public class FriendListFragment extends JugglerFragment {
                 public void onClick(View v) {
 //                    startActivity(UserActivity.getIntent(getContext(),user.getId(),new Gson().toJson(user)));
                     navigateTo().state(Remove.closeCurrentActivity());
-                    navigateTo().state(Add.newActivity(new DialogState(user.getFirst_name()+ " " + user.getLast_name(), user.getId(), 0, forwardMess), BaseActivity.class));
+                    navigateTo().state(Add.newActivity(new DialogState(user.getFirst_name() + " " + user.getLast_name(), user.getId(), 0, forwardMess), BaseActivity.class));
                 }
             });
 

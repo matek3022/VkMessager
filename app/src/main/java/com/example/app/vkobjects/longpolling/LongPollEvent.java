@@ -1,5 +1,7 @@
 package com.example.app.vkobjects.longpolling;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class LongPollEvent extends ArrayList<Object> implements Serializable {
     public int chatId = 0;
     public String title;
     public String message;
-    public Object obj;
+    public LinkedTreeMap<String, String> obj;
 
     public void init() {
         type = ((Double) get(0)).intValue();
@@ -50,7 +52,10 @@ public class LongPollEvent extends ArrayList<Object> implements Serializable {
                 ts = ((Double) get(4)).intValue();
                 title = get(5).toString();
                 message = get(6).toString();
-                obj = get(7);
+                try {
+                    obj = (LinkedTreeMap<String, String>) get(7);
+                }catch (Exception ignored){
+                }
                 break;
             case READ_IN_EVENT:
                 userId = ((Double) get(1)).intValue();

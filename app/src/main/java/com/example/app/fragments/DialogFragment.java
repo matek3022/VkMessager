@@ -48,6 +48,7 @@ import com.example.app.managers.PreferencesManager;
 import com.example.app.sqlite.DBHelper;
 import com.example.app.transformation.CircularTransformation;
 import com.example.app.utils.CryptUtils;
+import com.example.app.utils.GuiUtils;
 import com.example.app.utils.Util;
 import com.example.app.vkobjects.Attachment;
 import com.example.app.vkobjects.Dialogs;
@@ -132,23 +133,79 @@ public class DialogFragment extends JugglerFragment {
             if (items != null) {
                 if (items.size() > 0) {
                     LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
-                    if (event.chatId == 0) {
-                        if (user_id == event.userId) {
-                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : event.flags > 35 ? 0 : 1,  System.currentTimeMillis() / 1000L));
-                            if (adapter != null) {
-                                recyclerView.scrollToPosition(items.size()-1);
-                                adapter.notifyDataSetChanged();
-                            }
+                    int value = event.flags;
+                    int read = 1;
+                    int out = 0;
+                    if (value >= 65536) {
+                        value-=65536;
+                    }
+                    if (value >= 512) {
+                        value-= 512;
+                    }
+                    if (value >= 256) {
+                        value-=256;
+                    }
+                    if (value >= 128) {
+                        value-=128;
+                    }
+                    if (value >= 64) {
+                        value-=64;
+                    }
+                    if (value >=32) {
+                        value-=32;
+                        out = 0;
+                    }
+                    if (value >=16) {
+                        value-=16;
+                        out = 0;
+                    }
+                    if (value >=8) {
+                        value-=8;
+                    }
+                    if (value >=4) {
+                        value-=4;
+                    }
+                    if (value >=2) {
+                        value-=2;
+                        out = 1;
+                    }
+                    if (value >=1) {
+                        value-=1;
+                        read = 0;
+                    }
+                    int currUserId = event.userId;
+                    int currChatId = 0;
+                    if (event.userId > 2000000000) {
+                        currChatId = currUserId - 2000000000;
+                        try {
+                            currUserId = Integer.valueOf(event.obj.get("from"));
+                        } catch (Exception ignored) {
                         }
-                    } else {
-                        if (chat_id == event.chatId) {
-                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : 0, System.currentTimeMillis() / 1000L));
-                            if (adapter != null) {
-                                recyclerView.scrollToPosition(items.size()-1);
-                                adapter.notifyDataSetChanged();
-                            }
+                        if (currUserId == profileId) {
+                            out = 1;
+                        } else {
+                            out = 0;
                         }
                     }
+
+                    items.add(new Dialogs(event.mid, currUserId, currChatId, profileId, event.message, read, out,  System.currentTimeMillis() / 1000L));
+                    if (adapter != null) {
+                        recyclerView.scrollToPosition(items.size()-1);
+                        adapter.notifyDataSetChanged();
+                    }
+//                    if (event.chatId == 0) {
+//                        if (user_id == event.userId) {
+//
+//                        }
+//                    } else {
+//                        if (chat_id == event.chatId) {
+//                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : 0, System.currentTimeMillis() / 1000L));
+//                            if (adapter != null) {
+//                                recyclerView.scrollToPosition(items.size()-1);
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                        }
+//                    }
                 }
             }
         }
@@ -203,11 +260,9 @@ public class DialogFragment extends JugglerFragment {
             if (items != null) {
                 if (items.size() > 0) {
                     LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getId() == event.mid) {
-                            if (items.get(i).getOut() == 0) {
-                                items.get(i).setRead_state(1);
-                            }
+                    if (event.userId == user_id || event.userId == chat_id + 2000000000) {
+                        for (int i = 0; i < items.size(); i++) {
+                            items.get(i).setRead_state(1);
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -221,11 +276,9 @@ public class DialogFragment extends JugglerFragment {
             if (items != null) {
                 if (items.size() > 0) {
                     LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getId() == event.mid) {
-                            if (items.get(i).getOut() == 1) {
-                                items.get(i).setRead_state(1);
-                            }
+                    if (event.userId == user_id || event.userId == chat_id + 2000000000) {
+                        for (int i = 0; i < items.size(); i++) {
+                            items.get(i).setRead_state(1);
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -336,6 +389,7 @@ public class DialogFragment extends JugglerFragment {
                         call.enqueue(new Callback<ServerResponse>() {
                             @Override
                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                                if (response.body() == null) GuiUtils.showRequestLimitErrorMessage(getActivity());
                                 frwdMessages.clear();
                                 mess.setHint(getString(R.string.WRITE_MESSAGE));
                                 refreshLayout.setRefreshing(false);
@@ -514,6 +568,7 @@ public class DialogFragment extends JugglerFragment {
                                     adapter.notifyDataSetChanged();
                                 } else {
                                     refreshLayout.setRefreshing(false);
+                                    GuiUtils.showRequestLimitErrorMessage(getActivity());
                                 }
                             }
 
@@ -528,6 +583,7 @@ public class DialogFragment extends JugglerFragment {
                         });
                     } else {
                         refreshLayout.setRefreshing(false);
+                        GuiUtils.showRequestLimitErrorMessage(getActivity());
                     }
                 }
 

@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.app.managers.PreferencesManager;
 import com.example.app.vkobjects.ServerResponse;
@@ -52,24 +53,7 @@ public class LongPollService extends Service {
                 @Override
                 public void run() {
                     initPrefs();
-                    Call<ServerResponse<GetLpSrvr>> responseCall = service.getLongPollServer(token);
-                    responseCall.enqueue(new Callback<ServerResponse<GetLpSrvr>>() {
-                        @Override
-                        public void onResponse(Call<ServerResponse<GetLpSrvr>> call, Response<ServerResponse<GetLpSrvr>> response) {
-                            getLpSrvr = response.body().getResponse();
-                            startRequest();
-                        }
-
-                        @Override
-                        public void onFailure(Call<ServerResponse<GetLpSrvr>> call, Throwable t) {
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    restartService();
-                                }
-                            }, INTERNET_DELAY);
-                        }
-                    });
+                    updateLongPoll();
                 }
             }).start();
         }
@@ -94,12 +78,42 @@ public class LongPollService extends Service {
 
             @Override
             public void onFailure(Call<LongPollResponse> call, Throwable t) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        restartService();
-                    }
-                }, INTERNET_DELAY);
+                if (t.getMessage().contains("Unable")) {
+                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            restartService();
+                        }
+                    }, INTERNET_DELAY);
+                } else {
+                    updateLongPoll();
+                }
+            }
+        });
+    }
+
+    private void updateLongPoll() {
+        service.getLongPollServer(token).enqueue(new Callback<ServerResponse<GetLpSrvr>>() {
+            @Override
+            public void onResponse(Call<ServerResponse<GetLpSrvr>> call, Response<ServerResponse<GetLpSrvr>> response) {
+                getLpSrvr = response.body().getResponse();
+                startRequest();
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponse<GetLpSrvr>> call, Throwable t) {
+                if (t.getMessage().contains("Unable")) {
+                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            restartService();
+                        }
+                    }, INTERNET_DELAY);
+                } else {
+                    updateLongPoll();
+                }
             }
         });
     }

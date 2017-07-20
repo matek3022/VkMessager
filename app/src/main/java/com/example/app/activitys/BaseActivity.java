@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.app.fragments.states.DialogListState;
+import com.example.app.vkobjects.longpolling.LongPollService;
 
 import cn.nekocode.emojix.Emojix;
 import me.ilich.juggler.Juggler;
@@ -20,6 +21,7 @@ public class BaseActivity extends JugglerActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mediaPlayer != null) mediaPlayer = new MediaPlayer();
+        startService(new Intent(this, LongPollService.class));
     }
 
 

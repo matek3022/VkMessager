@@ -22,6 +22,18 @@ public class Dialogs implements Serializable {
         body = in.readString();
         chat_id = in.readInt();
     }
+    public Dialogs (int id, int user_id, int chat_id, int from_id, String body, int read_state, int out, long date) {
+        this.id = id;
+        this.out = out;
+        this.user_id = user_id;
+        this.chat_id = chat_id;
+        this.from_id = from_id;
+        this.body = body;
+        this.read_state = read_state;
+        this.date = date;
+        fwd_messages = new ArrayList<Dialogs>();
+        attachments = new ArrayList<Attachment>();
+    }
     public  Dialogs (int usid,String bady, int rs,int o, long d) {
         //access_token=at;
         user_id=usid;
@@ -97,4 +109,7 @@ public class Dialogs implements Serializable {
         this.title = title;
     }
 
+    public void setRead_state(int read_state) {
+        this.read_state = read_state;
+    }
 }

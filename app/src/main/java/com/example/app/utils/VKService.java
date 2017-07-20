@@ -7,12 +7,15 @@ import com.example.app.vkobjects.ServerResponse;
 import com.example.app.vkobjects.User;
 import com.example.app.vkobjects.VideoInformation;
 import com.example.app.vkobjects.attachmenttype.PhotoMess;
+import com.example.app.vkobjects.longpolling.GetLpSrvr;
+import com.example.app.vkobjects.longpolling.LongPollResponse;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by Каракатица on 07.10.2016.
@@ -54,4 +57,15 @@ public interface VKService {
     @GET ("photos.get?&v=5.60&count=1000&album_id=profile&rev=1")
     Call<ServerResponse<ItemMess<ArrayList<PhotoMess>>>> getPhotos (@Query("access_token") String access_token,
                                                                     @Query("owner_id") int owner_id);
+
+    @GET ("messages.getLongPollServer?v=5.67&lp_version=2&need_pts=1")
+    Call<ServerResponse<GetLpSrvr>> getLongPollServer (@Query("access_token") String access_token);
+
+    @GET
+    Call<LongPollResponse> connect (@Url String server,
+                                    @Query("key") String key,
+                                    @Query("ts") long ts,
+                                    @Query("act") String act,
+                                    @Query("wait") int wait,
+                                    @Query("mode") int mode);
 }

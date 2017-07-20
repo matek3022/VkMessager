@@ -1,12 +1,14 @@
 package com.example.app.fragments;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,6 +55,7 @@ import com.example.app.vkobjects.ItemMess;
 import com.example.app.vkobjects.ServerResponse;
 import com.example.app.vkobjects.User;
 import com.example.app.vkobjects.VideoInformation;
+import com.example.app.vkobjects.longpolling.LongPollEvent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.luseen.autolinklibrary.AutoLinkMode;
@@ -100,6 +104,7 @@ public class DialogFragment extends JugglerFragment {
 
     private ArrayList<Integer> frwdMessages = new ArrayList<>();
 
+    private int profileId = PreferencesManager.getInstance().getUserID();
     private int user_id;
     private int chat_id;
     private String title;
@@ -121,10 +126,135 @@ public class DialogFragment extends JugglerFragment {
     private boolean crypting;
     private String cryptKey;
 
+    private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    if (event.chatId == 0) {
+                        if (user_id == event.userId) {
+                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : event.flags > 35 ? 0 : 1,  System.currentTimeMillis() / 1000L));
+                            if (adapter != null) {
+                                recyclerView.scrollToPosition(items.size()-1);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    } else {
+                        if (chat_id == event.chatId) {
+                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : 0, System.currentTimeMillis() / 1000L));
+                            if (adapter != null) {
+                                recyclerView.scrollToPosition(items.size()-1);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver onlineReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (names != null) {
+                if (names.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < names.size(); i++) {
+                        if (names.get(i).getId() == event.userId) {
+                            names.get(i).setOnline(1);
+                            if (adapter != null) adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver offlineReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (names != null) {
+                if (names.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < names.size(); i++) {
+                        if (names.get(i).getId() == event.userId) {
+                            names.get(i).setOnline(0);
+                            if (adapter != null) adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver typingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+
+    private BroadcastReceiver readInReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < items.size(); i++) {
+                        if (items.get(i).getId() == event.mid) {
+                            if (items.get(i).getOut() == 0) {
+                                items.get(i).setRead_state(1);
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    };
+    private BroadcastReceiver readOutReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < items.size(); i++) {
+                        if (items.get(i).getId() == event.mid) {
+                            if (items.get(i).getOut() == 1) {
+                                items.get(i).setRead_state(1);
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        localBroadcastManager.registerReceiver(messagesReceiver, new IntentFilter(LongPollEvent.NEW_MESSAGE_INTENT));
+        localBroadcastManager.registerReceiver(onlineReceiver, new IntentFilter(LongPollEvent.ONLINE_INTENT));
+        localBroadcastManager.registerReceiver(offlineReceiver, new IntentFilter(LongPollEvent.OFFLINE_INTENT));
+        localBroadcastManager.registerReceiver(readInReceiver, new IntentFilter(LongPollEvent.READ_IN_INTENT));
+        localBroadcastManager.registerReceiver(readOutReceiver, new IntentFilter(LongPollEvent.READ_OUT_INTENT));
         return inflater.inflate(R.layout.fragment_dialog, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        localBroadcastManager.unregisterReceiver(messagesReceiver);
+        localBroadcastManager.unregisterReceiver(onlineReceiver);
+        localBroadcastManager.unregisterReceiver(offlineReceiver);
+        localBroadcastManager.unregisterReceiver(readInReceiver);
+        localBroadcastManager.unregisterReceiver(readOutReceiver);
+        super.onDestroyView();
     }
 
     @Override
@@ -199,7 +329,7 @@ public class DialogFragment extends JugglerFragment {
                         for (int i = 0; i < frwdMessages.size(); i++) {
                             strIdMess += "," + frwdMessages.get(i);
                         }
-
+                        final String messageFinal = message;
                         String TOKEN = preferencesManager.getToken();
                         Call<ServerResponse> call = service.sendMessage(TOKEN, kek, message, chat_id, 2000000000 + chat_id, strIdMess);
 
@@ -208,8 +338,9 @@ public class DialogFragment extends JugglerFragment {
                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                                 frwdMessages.clear();
                                 mess.setHint(getString(R.string.WRITE_MESSAGE));
-                                off = 0;
-                                refresh(off);
+                                refreshLayout.setRefreshing(false);
+//                                off = 0;
+//                                refresh(off);
                             }
 
                             @Override
@@ -362,7 +493,7 @@ public class DialogFragment extends JugglerFragment {
                         refreshLayout.setRefreshing(false);
 
                         String TOKEN = preferencesManager.getToken();
-                        Call<ServerResponse<ArrayList<User>>> call1 = service.getUser(TOKEN, people_id, "photo_100,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
+                        Call<ServerResponse<ArrayList<User>>> call1 = service.getUser(TOKEN, people_id, "photo_100,photo_200,photo_400_orig,photo_max_orig, online,city,country,education, universities, schools,bdate,contacts");
 
                         call1.enqueue(new Callback<ServerResponse<ArrayList<User>>>() {
                             @Override

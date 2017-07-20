@@ -21,6 +21,7 @@ public class App extends Application {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     public static final VKService service = retrofit.create(VKService.class);
+
     @Override
     public void onCreate() {
         super.onCreate();

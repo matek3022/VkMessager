@@ -103,6 +103,18 @@ public class Dialogs implements Serializable {
         return photo_100;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public void setOut(int out) {
+        this.out = out;
+    }
+
     public void setPhoto_50(String photo_50) {
         this.photo_50 = photo_50;
     }

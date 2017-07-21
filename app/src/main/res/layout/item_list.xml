@@ -96,8 +96,18 @@
                 android:layout_alignRight="@+id/imageView4" />
 
         </RelativeLayout>
-
+        <TextView
+            android:id="@+id/typing_tv"
+            android:visibility="invisible"
+            android:layout_above="@+id/shape_line"
+            android:textColor="@color/gray_alpha_30"
+            android:text="Набирает сообщение..."
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <View
+            android:id="@+id/shape_line"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_below="@+id/container"

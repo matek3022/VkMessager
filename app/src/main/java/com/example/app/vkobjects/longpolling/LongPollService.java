@@ -1,14 +1,21 @@
 package com.example.app.vkobjects.longpolling;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.example.app.R;
+import com.example.app.activitys.BaseActivity;
 import com.example.app.managers.PreferencesManager;
 import com.example.app.vkobjects.ServerResponse;
 
@@ -33,6 +40,7 @@ public class LongPollService extends Service {
 
     private boolean isRunning = false;
     private Handler handler = new Handler();
+    private LocalBroadcastManager localBroadcastManager;
 
     @Nullable
     @Override
@@ -47,6 +55,7 @@ public class LongPollService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
         if (!isRunning) {
             isRunning = true;
             new Thread(new Runnable() {
@@ -79,7 +88,7 @@ public class LongPollService extends Service {
             @Override
             public void onFailure(Call<LongPollResponse> call, Throwable t) {
                 if (t.getMessage().contains("Unable")) {
-                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -104,7 +113,7 @@ public class LongPollService extends Service {
             @Override
             public void onFailure(Call<ServerResponse<GetLpSrvr>> call, Throwable t) {
                 if (t.getMessage().contains("Unable")) {
-                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -123,41 +132,61 @@ public class LongPollService extends Service {
         startService(new Intent(this, LongPollService.class));
     }
 
-    private void sendBroadcasts(ArrayList<LongPollEvent> longPollEvents) {
-        for (int i = 0; i < longPollEvents.size(); i++) {
-            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
-            longPollEvents.get(i).init();
-            Intent intent = null;
-            switch (longPollEvents.get(i).type){
-                case LongPollEvent.NEW_MESSAGE_EVENT:
-                    intent = new Intent(LongPollEvent.NEW_MESSAGE_INTENT);
-                    break;
-                case LongPollEvent.READ_IN_EVENT:
-                    intent = new Intent(LongPollEvent.READ_IN_INTENT);
-                    break;
-                case LongPollEvent.READ_OUT_EVENT:
-                    intent = new Intent(LongPollEvent.READ_OUT_INTENT);
-                    break;
-                case LongPollEvent.ONLINE_EVENT:
-                    intent = new Intent(LongPollEvent.ONLINE_INTENT);
-                    break;
-                case LongPollEvent.OFFLINE_EVENT:
-                    intent = new Intent(LongPollEvent.OFFLINE_INTENT);
-                    break;
-                case LongPollEvent.TYPING_IN_USER_EVENT:
-                    intent = new Intent(LongPollEvent.TYPING_IN_USER_INTENT);
-                    break;
-                case LongPollEvent.TYPING_IN_CHAT_EVENT:
-                    intent = new Intent(LongPollEvent.TYPING_IN_CHAT_INTENT);
-                    break;
-                case LongPollEvent.NEW_COUNT_EVENT:
-                    intent = new Intent(LongPollEvent.NEW_COUNT_INTENT);
-                    break;
+    private void sendBroadcasts(final ArrayList<LongPollEvent> longPollEvents) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                for (int i = 0; i < longPollEvents.size(); i++) {
+                    longPollEvents.get(i).init();
+                    Intent intent = null;
+                    switch (longPollEvents.get(i).type){
+                        case LongPollEvent.NEW_MESSAGE_EVENT:
+                            intent = new Intent(LongPollEvent.NEW_MESSAGE_INTENT);
+//                            showNotification(longPollEvents.get(i).message);
+                            break;
+                        case LongPollEvent.READ_IN_EVENT:
+                            intent = new Intent(LongPollEvent.READ_IN_INTENT);
+                            break;
+                        case LongPollEvent.READ_OUT_EVENT:
+                            intent = new Intent(LongPollEvent.READ_OUT_INTENT);
+                            break;
+                        case LongPollEvent.ONLINE_EVENT:
+                            intent = new Intent(LongPollEvent.ONLINE_INTENT);
+                            break;
+                        case LongPollEvent.OFFLINE_EVENT:
+                            intent = new Intent(LongPollEvent.OFFLINE_INTENT);
+                            break;
+                        case LongPollEvent.TYPING_IN_USER_EVENT:
+                            intent = new Intent(LongPollEvent.TYPING_IN_USER_INTENT);
+                            break;
+                        case LongPollEvent.TYPING_IN_CHAT_EVENT:
+                            intent = new Intent(LongPollEvent.TYPING_IN_CHAT_INTENT);
+                            break;
+                        case LongPollEvent.NEW_COUNT_EVENT:
+                            intent = new Intent(LongPollEvent.NEW_COUNT_INTENT);
+                            break;
+                    }
+                    if (intent != null) {
+                        intent.putExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE, longPollEvents.get(i));
+                        localBroadcastManager.sendBroadcast(intent);
+                    }
+                }
+                return null;
             }
-            if (intent != null) {
-                intent.putExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE, longPollEvents.get(i));
-                localBroadcastManager.sendBroadcast(intent);
-            }
-        }
+        }.execute();
+    }
+
+    private void showNotification(String message) {
+        Intent intent = new Intent(this, BaseActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher))
+                .setSmallIcon(R.drawable.messageicon)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(message)
+                .setContentIntent(pIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(133711, builder.build());
     }
 }

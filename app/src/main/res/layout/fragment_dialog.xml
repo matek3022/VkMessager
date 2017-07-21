@@ -31,21 +31,28 @@
         android:id="@+id/inputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/defaultPadding"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true">
 
+        <TextView
+            android:id="@+id/typing_tv"
+            android:visibility="invisible"
+            android:textColor="@color/gray_alpha_30"
+            android:text="Набирает сообщение..."
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/emoji_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/defaultPadding"
+            android:layout_marginLeft="@dimen/defaultPadding"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginRight="@dimen/defaultPadding" />
+            android:layout_alignParentStart="true"/>
 
         <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+            android:layout_below="@id/typing_tv"
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,12 +66,13 @@
             android:inputType="textMultiLine"
             android:maxLines="5"
             android:minHeight="40dp"
-            android:padding="8dp"
+            android:paddingLeft="@dimen/defaultPadding"
+            android:paddingRight="@dimen/defaultPadding"
+            android:paddingBottom="@dimen/defaultPadding"
             tools:text="asgdddddsdfsadhfghasjdgfjhsagdjfgjhasgdfjhgsjahdgfjgsajdgfjhsgajdhfgjasgdjhfgjashdgfjhasgdfasdfgjasdfsadfsad" />
 
         <Button
-            android:layout_marginStart="@dimen/defaultPadding"
-            android:layout_marginLeft="@dimen/defaultPadding"
+            android:layout_marginRight="@dimen/defaultPadding"
             android:id="@+id/button"
             android:layout_centerVertical="true"
             android:layout_width="40dp"

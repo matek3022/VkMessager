@@ -5,7 +5,7 @@ package com.example.app.vkobjects;
  */
 
 public class Item {
-    private int unread;
+    private int unread = 0;
     private Dialogs message;
 
     public Dialogs getMessage() {
@@ -15,7 +15,23 @@ public class Item {
     public int getUnread() {
         return unread;
     }
+    public Item(Dialogs dialogs, int unread) {
+        message = dialogs;
+        this.unread = unread;
+    }
     public Item(){
         message = new Dialogs();
+    }
+
+    public void incUnread() {
+        unread++;
+    }
+
+    public void setUnread(int unread) {
+        this.unread = unread;
+    }
+
+    public void setMessage(Dialogs message) {
+        this.message = message;
     }
 }

@@ -193,19 +193,6 @@ public class DialogFragment extends JugglerFragment {
                         recyclerView.scrollToPosition(items.size()-1);
                         adapter.notifyDataSetChanged();
                     }
-//                    if (event.chatId == 0) {
-//                        if (user_id == event.userId) {
-//
-//                        }
-//                    } else {
-//                        if (chat_id == event.chatId) {
-//                            items.add(new Dialogs(event.mid, event.userId, event.chatId, profileId, event.message, 0, event.flags > 50 ? 1 : 0, System.currentTimeMillis() / 1000L));
-//                            if (adapter != null) {
-//                                recyclerView.scrollToPosition(items.size()-1);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        }
-//                    }
                 }
             }
         }

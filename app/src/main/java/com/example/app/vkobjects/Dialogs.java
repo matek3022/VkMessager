@@ -103,6 +103,14 @@ public class Dialogs implements Serializable {
         return photo_100;
     }
 
+    public void setPhoto_50(String photo_50) {
+        this.photo_50 = photo_50;
+    }
+
+    public void setPhoto_100(String photo_100) {
+        this.photo_100 = photo_100;
+    }
+
     public void setAttachments (ArrayList<Attachment> at) {attachments=at;}
 
     public void setTitle(String title) {

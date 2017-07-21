@@ -1,12 +1,17 @@
 package com.example.app.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +40,7 @@ import com.example.app.vkobjects.Item;
 import com.example.app.vkobjects.ItemMess;
 import com.example.app.vkobjects.ServerResponse;
 import com.example.app.vkobjects.User;
+import com.example.app.vkobjects.longpolling.LongPollEvent;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -75,6 +81,7 @@ public class DialogListFragment extends JugglerFragment {
     private RecyclerView.Adapter adapter;
     private SQLiteDatabase dataBase;
     private PreferencesManager preferencesManager;
+    private int profileId = PreferencesManager.getInstance().getUserID();
 
     private String stroka = "";
     private int off = 0;
@@ -84,10 +91,211 @@ public class DialogListFragment extends JugglerFragment {
 
     private String forwardMess;
 
+    private BroadcastReceiver messagesReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    int value = event.flags;
+                    int read = 1;
+                    int out = 0;
+                    if (value >= 65536) {
+                        value-=65536;
+                    }
+                    if (value >= 512) {
+                        value-= 512;
+                    }
+                    if (value >= 256) {
+                        value-=256;
+                    }
+                    if (value >= 128) {
+                        value-=128;
+                    }
+                    if (value >= 64) {
+                        value-=64;
+                    }
+                    if (value >=32) {
+                        value-=32;
+                        out = 0;
+                    }
+                    if (value >=16) {
+                        value-=16;
+                        out = 0;
+                    }
+                    if (value >=8) {
+                        value-=8;
+                    }
+                    if (value >=4) {
+                        value-=4;
+                    }
+                    if (value >=2) {
+                        value-=2;
+                        out = 1;
+                    }
+                    if (value >=1) {
+                        value-=1;
+                        read = 0;
+                    }
+                    int currUserId = event.userId;
+                    int currChatId = 0;
+                    if (event.userId > 2000000000) {
+                        currChatId = currUserId - 2000000000;
+                        try {
+                            currUserId = Integer.valueOf(event.obj.get("from"));
+                        } catch (Exception ignored) {
+                        }
+                        if (currUserId == profileId) {
+                            out = 1;
+                        } else {
+                            out = 0;
+                        }
+                    }
+
+                    for (int i = 0; i < items.size(); i++) {
+                        if (currChatId == 0) {
+                            if (items.get(i).getMessage().getUser_id() == currUserId && items.get(i).getMessage().getChat_id() == 0) {
+                                items.get(i).setMessage(new Dialogs(event.mid, currUserId, currChatId, profileId, event.message, read, out,  System.currentTimeMillis() / 1000L));
+                                if (out == 1) {
+                                    items.get(i).setUnread(0);
+                                } else {
+                                    items.get(i).incUnread();
+                                }
+                                Item newItem = items.get(i);
+                                items.remove(i);
+                                items.add(0, newItem);
+                                if (adapter != null) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                                break;
+                            }
+                        } else {
+                            if (items.get(i).getMessage().getChat_id() == currChatId) {
+                                Dialogs newDialog = new Dialogs(event.mid, currUserId, currChatId, profileId, event.message, read, out,  System.currentTimeMillis() / 1000L);
+                                newDialog.setPhoto_100(items.get(i).getMessage().getPhoto_100());
+                                newDialog.setTitle(items.get(i).getMessage().getTitle());
+                                items.get(i).setMessage(newDialog);
+                                if (out == 1) {
+                                    items.get(i).setUnread(0);
+                                } else {
+                                    items.get(i).incUnread();
+                                }
+                                Item newItem = items.get(i);
+                                items.remove(i);
+                                items.add(0, newItem);
+                                if (adapter != null) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver onlineReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (names != null) {
+                if (names.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < names.size(); i++) {
+                        if (names.get(i).getId() == event.userId) {
+                            names.get(i).setOnline(1);
+                            if (adapter != null) adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver offlineReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (names != null) {
+                if (names.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < names.size(); i++) {
+                        if (names.get(i).getId() == event.userId) {
+                            names.get(i).setOnline(0);
+                            if (adapter != null) adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver typingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+
+    private BroadcastReceiver readInReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < items.size(); i++) {
+                        if (event.userId == items.get(i).getMessage().getUser_id() || event.userId == items.get(i).getMessage().getChat_id() + 2000000000) {
+                            items.get(i).getMessage().setRead_state(1);
+                            items.get(i).setUnread(0);
+                            if (adapter != null)
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        }
+    };
+    private BroadcastReceiver readOutReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (items != null) {
+                if (items.size() > 0) {
+                    LongPollEvent event = (LongPollEvent) intent.getSerializableExtra(LongPollEvent.INTENT_EXTRA_SERIALIZABLE);
+                    for (int i = 0; i < items.size(); i++) {
+                        if (event.userId == items.get(i).getMessage().getUser_id() || event.userId == items.get(i).getMessage().getChat_id() + 2000000000) {
+                            items.get(i).getMessage().setRead_state(1);
+                            items.get(i).setUnread(0);
+                            if (adapter != null)
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        localBroadcastManager.registerReceiver(messagesReceiver, new IntentFilter(LongPollEvent.NEW_MESSAGE_INTENT));
+        localBroadcastManager.registerReceiver(onlineReceiver, new IntentFilter(LongPollEvent.ONLINE_INTENT));
+        localBroadcastManager.registerReceiver(offlineReceiver, new IntentFilter(LongPollEvent.OFFLINE_INTENT));
+        localBroadcastManager.registerReceiver(readInReceiver, new IntentFilter(LongPollEvent.READ_IN_INTENT));
+        localBroadcastManager.registerReceiver(readOutReceiver, new IntentFilter(LongPollEvent.READ_OUT_INTENT));
         return inflater.inflate(R.layout.fragment_list_dialog, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        localBroadcastManager.unregisterReceiver(messagesReceiver);
+        localBroadcastManager.unregisterReceiver(onlineReceiver);
+        localBroadcastManager.unregisterReceiver(offlineReceiver);
+        localBroadcastManager.unregisterReceiver(readInReceiver);
+        localBroadcastManager.unregisterReceiver(readOutReceiver);
+        super.onDestroyView();
     }
 
     @Override

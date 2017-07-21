@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="5dp"
     android:background="@android:color/white"
     android:orientation="vertical">
@@ -53,12 +54,12 @@
                 android:layout_toLeftOf="@+id/textView9"
                 android:layout_toRightOf="@+id/imageView4"
                 android:layout_toStartOf="@+id/textView9"
-                android:ellipsize="end"
                 android:lines="1"
+                android:ellipsize="end"
                 android:paddingLeft="5dp"
                 android:paddingStart="5dp"
                 android:paddingTop="5dp"
-                android:text="Message" />
+                tools:text="Messagasdfsadfsadfsadfsadfsadfsadfsadfsae" />
 
             <TextView
                 android:id="@+id/textView8"

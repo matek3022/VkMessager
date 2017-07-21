@@ -1,5 +1,7 @@
 package com.example.app.vkobjects.longpolling;
 
+import android.text.TextUtils;
+
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.Serializable;
@@ -52,6 +54,7 @@ public class LongPollEvent extends ArrayList<Object> implements Serializable {
                 ts = ((Double) get(4)).intValue();
                 title = get(5).toString();
                 message = get(6).toString();
+                if (TextUtils.isEmpty(message)) message = "Вложение";
                 try {
                     obj = (LinkedTreeMap<String, String>) get(7);
                 }catch (Exception ignored){

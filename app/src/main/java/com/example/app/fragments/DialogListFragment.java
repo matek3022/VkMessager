@@ -657,7 +657,7 @@ public class DialogListFragment extends JugglerFragment {
                     if (forwardMess != null) {
                         navigateTo().state(Remove.closeCurrentActivity());
                     }
-                    navigateTo().state(Add.newActivity(new DialogState(userFinal.getFirst_name() + " " + userFinal.getLast_name(),
+                    navigateTo().state(Add.newActivity(new DialogState(dialog.getChat_id() == 0 ? userFinal.getFirst_name() + " " + userFinal.getLast_name() : dialog.getTitle(),
                             chatId == 0 ? userId : 0,
                             chatId, forwardMess), BaseActivity.class));
 

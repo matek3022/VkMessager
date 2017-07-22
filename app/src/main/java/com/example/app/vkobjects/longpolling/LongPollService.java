@@ -17,6 +17,7 @@ import android.util.Log;
 import com.example.app.R;
 import com.example.app.activitys.BaseActivity;
 import com.example.app.managers.PreferencesManager;
+import com.example.app.utils.NetworkUtils;
 import com.example.app.vkobjects.ServerResponse;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class LongPollService extends Service {
 
             @Override
             public void onFailure(Call<LongPollResponse> call, Throwable t) {
-                if (t.getMessage().contains("Unable")) {
+                if (!NetworkUtils.hasInternetConnection(getBaseContext())) {
 //                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -98,6 +99,11 @@ public class LongPollService extends Service {
                 } else {
                     updateLongPoll();
                 }
+//                if (t.getMessage().contains("Unable")) {
+//
+//                } else {
+//
+//                }
             }
         });
     }
@@ -112,7 +118,7 @@ public class LongPollService extends Service {
 
             @Override
             public void onFailure(Call<ServerResponse<GetLpSrvr>> call, Throwable t) {
-                if (t.getMessage().contains("Unable")) {
+                if (!NetworkUtils.hasInternetConnection(getBaseContext())) {
 //                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -123,6 +129,17 @@ public class LongPollService extends Service {
                 } else {
                     updateLongPoll();
                 }
+//                if (t.getMessage().contains("Unable")) {
+////                    Toast.makeText(getApplicationContext(), "Произошла ошибка! Мы уже перезапускаем сервис", Toast.LENGTH_SHORT).show();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            restartService();
+//                        }
+//                    }, INTERNET_DELAY);
+//                } else {
+//                    updateLongPoll();
+//                }
             }
         });
     }
